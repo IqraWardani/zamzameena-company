@@ -26,5 +26,5 @@ Company profile PT Zamzameena Ainsa Synergy tersedia sebagai aplikasi Next.js un
 - Ubah nama, alamat, email, nomor telepon, kalimat, dan teks tombol langsung pada HTML yang sesuai.
 - Konten tiap slide ada pada atribut `data-label`, `data-title`, `data-focus`, dan `data-description` di `index.html`; foto dan teks pertama tampil sebelum JavaScript berjalan. Slideshow berganti tiap enam detik.
 - Bagan organisasi berada dalam array `ORGANIZATION` di awal `js/main.js`; ubah nama divisi atau daftar unit di sana.
-- Warna dan font situs dikelola dari variabel di awal `css/style.css`. Mode siang (latar gelap) tampil sebagai default; tombol bulan beralih ke mode malam (latar terang). Pilihan tidak disimpan dan selalu kembali ke mode siang ketika halaman dimuat ulang.
+- Warna dan font situs dikelola dari variabel di awal `css/style.css`. Mode siang (latar terang) tampil sebagai default; tombol bulan beralih ke mode malam (latar gelap). Pilihan tidak disimpan dan selalu kembali ke mode siang ketika halaman dimuat ulang.
 - WhatsApp dapat dibuka dari sidebar dan bagian kontak. Tidak ada tombol WhatsApp mengambang.

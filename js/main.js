@@ -25,7 +25,7 @@ function initializeTheme() {
         toggle.setAttribute("title", label);
       });
       const themeColor = document.querySelector('meta[name="theme-color"]');
-      if (themeColor) themeColor.content = isNightMode ? "#0E0F11" : "#F4F5F6";
+      if (themeColor) themeColor.content = isNightMode ? "#F4F5F6" : "#0E0F11";
       window.setTimeout(() => root.classList.remove("theme-fade"), 700);
     });
   });

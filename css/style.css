@@ -1,11 +1,11 @@
 :root {
-  color-scheme: dark;
-  --bg: #0E0F11;
-  --surface: #17191C;
-  --ink: #ECEEF0;
-  --muted: #A4AAB0;
-  --line: #2A2D31;
-  --accent: #38C3FF;
+  color-scheme: light;
+  --bg: #F4F5F6;
+  --surface: #FFFFFF;
+  --ink: #131518;
+  --muted: #5B6168;
+  --line: #DDE0E3;
+  --accent: #0079AE;
   --brand: #00AEEF;
   --wa: #138A44;
   --pn-bg: #FFFFFF;
@@ -38,13 +38,13 @@
 }
 
 html[data-theme="night"] {
-  color-scheme: light;
-  --bg: #F4F5F6;
-  --surface: #FFFFFF;
-  --ink: #131518;
-  --muted: #5B6168;
-  --line: #DDE0E3;
-  --accent: #0079AE;
+  color-scheme: dark;
+  --bg: #0E0F11;
+  --surface: #17191C;
+  --ink: #ECEEF0;
+  --muted: #A4AAB0;
+  --line: #2A2D31;
+  --accent: #38C3FF;
   --pn-bg: #17191C;
   --pn-ink: #ECEEF0;
   --pn-muted: #A4AAB0;
