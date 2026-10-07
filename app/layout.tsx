@@ -1,37 +1,35 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
-import { SiteShell } from "@/components/site-shell";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 export const metadata: Metadata = {
   title: {
-    default: "Zamzameena — Intelligence Business Ecosystem",
-    template: "%s | Zamzameena",
+    default: "Beranda | PT Zamzameena Ainsa Synergy",
+    template: "%s | PT Zamzameena Ainsa Synergy",
   },
-  description: "PT Zamzameena Ainsa Synergy builds an intelligence business ecosystem through Smart Market, platform-centric operations, data intelligence, and strategic partnership.",
+  description: "PT Zamzameena Ainsa Synergy membangun ekosistem bisnis digital yang menghubungkan pasar, data, dan mitra.",
+  icons: {
+    icon: "/assets/logo.svg",
+  },
   openGraph: {
-    title: "Zamzameena — Intelligence Business Ecosystem",
-    description: "An integrated corporate profile for PT Zamzameena Ainsa Synergy, focused on data-led business architecture, ecosystem participation, and strategic growth.",
+    title: "PT Zamzameena Ainsa Synergy",
+    description: "Ekosistem bisnis digital yang menghubungkan pasar, data, dan mitra.",
     type: "website",
-    siteName: "Zamzameena",
+    siteName: "PT Zamzameena Ainsa Synergy",
   },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`} suppressHydrationWarning>
-      <body className="min-h-full bg-stone-50 text-zinc-900">
-        <SiteShell>{children}</SiteShell>
+    <html lang="id" suppressHydrationWarning>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <meta name="theme-color" content="#0E0F11" />
+      </head>
+      <body>
+        {children}
+        <Script src="/js/main.js" strategy="afterInteractive" />
       </body>
     </html>
   );

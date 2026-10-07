@@ -1,4 +1,5 @@
 import { SectionHeading } from "@/components/section-heading";
+import { SiteShell } from "@/components/site-shell";
 import { productCategories } from "@/data/company";
 
 export const metadata = {
@@ -8,7 +9,8 @@ export const metadata = {
 
 export default function ProductKnowledgePage() {
   return (
-    <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+    <SiteShell>
+      <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
       <SectionHeading
         eyebrow="Product knowledge"
         title="Understanding the products inside the ecosystem"
@@ -47,6 +49,7 @@ export default function ProductKnowledgePage() {
           ))}
         </div>
       </div>
-    </div>
+      </div>
+    </SiteShell>
   );
 }
