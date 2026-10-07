@@ -14,18 +14,18 @@
   --pn-line: #E3E6E9;
   --pn-cta-bg: #0E0F11;
   --pn-cta-ink: #FFFFFF;
-  --stage-bg: #101316;
-  --stage-media-bg: #111519;
-  --stage-ink: #FFFFFF;
-  --stage-eyebrow: #7FD6F7;
-  --stage-ink-soft: rgb(255 255 255 / 62%);
-  --stage-ink-medium: rgb(255 255 255 / 82%);
-  --stage-rule: rgb(255 255 255 / 28%);
-  --stage-outline: rgb(255 255 255 / 48%);
-  --stage-pill-bg: rgb(255 255 255 / 7%);
-  --stage-control-outline: rgb(255 255 255 / 44%);
-  --stage-progress-track: rgb(255 255 255 / 38%);
-  --stage-shade: linear-gradient(90deg, rgb(14 15 17 / 94%) 0%, rgb(14 15 17 / 79%) 39%, rgb(14 15 17 / 37%) 74%, rgb(14 15 17 / 12%) 100%);
+  --stage-bg: #F4F5F6;
+  --stage-media-bg: #E8ECEF;
+  --stage-ink: #131518;
+  --stage-eyebrow: #0079AE;
+  --stage-ink-soft: rgb(19 21 24 / 62%);
+  --stage-ink-medium: rgb(19 21 24 / 82%);
+  --stage-rule: rgb(19 21 24 / 28%);
+  --stage-outline: rgb(19 21 24 / 48%);
+  --stage-pill-bg: rgb(19 21 24 / 4%);
+  --stage-control-outline: rgb(19 21 24 / 44%);
+  --stage-progress-track: rgb(19 21 24 / 38%);
+  --stage-shade: linear-gradient(90deg, rgb(244 245 246 / 97%) 0%, rgb(244 245 246 / 84%) 39%, rgb(244 245 246 / 38%) 74%, rgb(244 245 246 / 8%) 100%);
   --icon-bg: #0B1D28;
   --icon-stroke: #7FD6F7;
   --primary-ink: #06151C;
@@ -51,6 +51,18 @@ html[data-theme="night"] {
   --pn-line: #2A2D31;
   --pn-cta-bg: #F4F5F6;
   --pn-cta-ink: #101214;
+  --stage-bg: #101316;
+  --stage-media-bg: #111519;
+  --stage-ink: #FFFFFF;
+  --stage-eyebrow: #7FD6F7;
+  --stage-ink-soft: rgb(255 255 255 / 62%);
+  --stage-ink-medium: rgb(255 255 255 / 82%);
+  --stage-rule: rgb(255 255 255 / 28%);
+  --stage-outline: rgb(255 255 255 / 48%);
+  --stage-pill-bg: rgb(255 255 255 / 7%);
+  --stage-control-outline: rgb(255 255 255 / 44%);
+  --stage-progress-track: rgb(255 255 255 / 38%);
+  --stage-shade: linear-gradient(90deg, rgb(14 15 17 / 94%) 0%, rgb(14 15 17 / 79%) 39%, rgb(14 15 17 / 37%) 74%, rgb(14 15 17 / 12%) 100%);
 }
 
 * { box-sizing: border-box; }
@@ -122,7 +134,8 @@ html[data-theme="night"] .icon-sun { display: block; }
 .slide.is-active { opacity: 1; }
 .slide img { object-fit: cover; }
 .photo-fallback { position: absolute; inset: 0; overflow: hidden; background: var(--stage-media-bg); }
-.photo-fallback svg { width: 100%; height: 100%; }
+.photo-fallback svg { width: 100%; height: 100%; opacity: .24; }
+html[data-theme="night"] .photo-fallback svg { opacity: 1; }
 .stage-shade { z-index: -1; background: var(--stage-shade); }
 .stage-copy {
   display: flex;
