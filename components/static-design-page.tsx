@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 
 type StaticDesignPageProps = {
-  fileName: "index.html" | "tentang.html" | "struktur.html" | "hubungi.html";
+  fileName: "struktur.html" | "hubungi.html";
 };
 
 const routeRewrites = [
@@ -17,10 +17,6 @@ const routeRewrites = [
 export function StaticDesignPage({ fileName }: StaticDesignPageProps) {
   const source = (() => {
     switch (fileName) {
-      case "index.html":
-        return readFileSync(join(process.cwd(), "index.html"), "utf8");
-      case "tentang.html":
-        return readFileSync(join(process.cwd(), "tentang.html"), "utf8");
       case "struktur.html":
         return readFileSync(join(process.cwd(), "struktur.html"), "utf8");
       case "hubungi.html":

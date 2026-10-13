@@ -38,95 +38,6 @@ function initializeWhatsAppLinks() {
   });
 }
 
-function initializeJumpLinks() {
-  const links = [...document.querySelectorAll(".jump-nav a")];
-  links.forEach((link) => {
-    link.addEventListener("click", () => {
-      links.forEach((item) => item.classList.toggle("active", item === link));
-    });
-  });
-}
-
-function initializeSlideshow() {
-  const stage = document.querySelector(".home-stage");
-  const slides = [...document.querySelectorAll(".home-stage .slide")];
-  if (!stage || slides.length < 2) return;
-
-  const indicators = [...document.querySelectorAll(".slide-indicators button")];
-  const stageCopy = stage.querySelector(".stage-copy");
-  const label = stage.querySelector(".stage-label");
-  const title = stage.querySelector(".stage-title");
-  const focus = stage.querySelector(".stage-focus");
-  const description = stage.querySelector(".stage-description");
-  const number = stage.querySelector(".page-number");
-  const motionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
-  let activeIndex = 0;
-  let timer;
-  let animationTimer;
-
-  function showSlide(index) {
-    activeIndex = (index + slides.length) % slides.length;
-    const slide = slides[activeIndex];
-    slides.forEach((item, itemIndex) => item.classList.toggle("is-active", itemIndex === activeIndex));
-    indicators.forEach((indicator, itemIndex) => indicator.setAttribute("aria-selected", String(itemIndex === activeIndex)));
-    label.textContent = slide.dataset.label || "";
-    title.textContent = slide.dataset.title || "";
-    focus.textContent = slide.dataset.focus || "";
-    description.textContent = slide.dataset.description || "";
-    number.textContent = `0${activeIndex + 1}`;
-
-    if (!motionPreference.matches) {
-      stageCopy.classList.remove("is-changing");
-      window.clearTimeout(animationTimer);
-      requestAnimationFrame(() => stageCopy.classList.add("is-changing"));
-      animationTimer = window.setTimeout(() => stageCopy.classList.remove("is-changing"), 500);
-    }
-  }
-
-  function stopTimer() {
-    window.clearInterval(timer);
-  }
-
-  function startTimer() {
-    stopTimer();
-    if (motionPreference.matches || stage.matches(":hover")) return;
-    timer = window.setInterval(() => showSlide(activeIndex + 1), 6000);
-  }
-
-  indicators.forEach((indicator) => indicator.addEventListener("click", () => {
-    showSlide(Number(indicator.dataset.slide));
-    startTimer();
-  }));
-  stage.querySelector(".slide-prev")?.addEventListener("click", () => {
-    showSlide(activeIndex - 1);
-    startTimer();
-  });
-  stage.querySelector(".slide-next")?.addEventListener("click", () => {
-    showSlide(activeIndex + 1);
-    startTimer();
-  });
-  stage.addEventListener("keydown", (event) => {
-    if (event.target.closest("a, button")) return;
-    if (event.key === "ArrowLeft") {
-      event.preventDefault();
-      showSlide(activeIndex - 1);
-      startTimer();
-    } else if (event.key === "ArrowRight") {
-      event.preventDefault();
-      showSlide(activeIndex + 1);
-      startTimer();
-    }
-  });
-  stage.addEventListener("mouseenter", stopTimer);
-  stage.addEventListener("mouseleave", startTimer);
-  motionPreference.addEventListener("change", () => {
-    if (motionPreference.matches) stopTimer();
-    else startTimer();
-  });
-  showSlide(0);
-  startTimer();
-}
-
 function initializePhotoFallbacks() {
   document.querySelectorAll(".stage-media img").forEach((image) => {
     image.addEventListener("error", () => {
@@ -252,8 +163,6 @@ document.querySelectorAll("[data-year]").forEach((element) => {
 });
 initializeTheme();
 initializeWhatsAppLinks();
-initializeJumpLinks();
-initializeSlideshow();
 initializePhotoFallbacks();
 initializeOrganizationChart();
 initializeCopyButtons();
