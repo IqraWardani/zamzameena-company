@@ -1,85 +1,102 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { CtaBanner } from "@/components/cta-banner";
-import { FounderProfile } from "@/components/founder-profile";
+import { FounderCard } from "@/components/founder-card";
 import { SiteFrame } from "@/components/site-frame";
 import { SiteSectionHeading } from "@/components/site-section-heading";
-import { aboutContent, founders } from "@/data/site-content";
+import { aboutPageContent } from "@/data/about-page";
 
 export const metadata: Metadata = {
-  title: "About",
+  title: "About Zamzameena Ainsa Synergy",
   description:
-    "Learn about Zamzameena Ainsa Synergy's vision, mission, philosophy, and founding team.",
+    "Learn how Zamzameena Ainsa Synergy connects products, businesses, markets, and technology to create sustainable growth.",
   openGraph: {
     title: "About Zamzameena Ainsa Synergy",
     description:
-      "Meet the people and principles shaping a connected intelligence business ecosystem.",
+      "Discover the principles, direction, and founders behind the Zamzameena business ecosystem.",
     type: "website",
   },
 };
 
 export default function AboutPage() {
   return (
-    <SiteFrame>
-      <main id="main-content">
-        <section className="zas-inner-hero">
+    <SiteFrame variant="about-design">
+      <main className="about-design" id="main-content">
+        <section className="about-design-hero" aria-labelledby="about-design-title">
           <Image
-            src={aboutContent.hero.image}
-            alt={aboutContent.hero.imageAlt}
+            src={aboutPageContent.hero.image}
+            alt={aboutPageContent.hero.imageAlt}
             fill
             priority
             sizes="100vw"
           />
-          <div className="zas-inner-hero-shade" />
-          <div className="zas-inner-hero-content">
-            <p className="zas-eyebrow">{aboutContent.hero.eyebrow}</p>
-            <h1>{aboutContent.hero.title}</h1>
-            <p>{aboutContent.hero.description}</p>
-          </div>
-          <span className="zas-inner-hero-index">01 — OUR STORY</span>
-        </section>
-
-        <section className="zas-purpose-section" aria-label="Our vision and mission" data-reveal>
-          <div className="zas-purpose-intro">
-            <SiteSectionHeading
-              eyebrow="Purpose & Direction"
-              title="Built with a clear sense of purpose."
-            />
-            <p>
-              We connect ambition with the people, insight, and capabilities
-              needed to move businesses forward.
-            </p>
-          </div>
-          <div className="zas-purpose-grid">
-            <article className="zas-purpose-card">
-              <span>01</span>
-              <p className="zas-eyebrow">Our Vision</p>
-              <h2>A trusted ecosystem creating value that lasts.</h2>
-              <p>{aboutContent.vision}</p>
-            </article>
-            <article className="zas-purpose-card">
-              <span>02</span>
-              <p className="zas-eyebrow">Our Mission</p>
-              <h2>Make meaningful participation possible.</h2>
-              <p>{aboutContent.mission}</p>
-            </article>
+          <div className="about-design-hero-shade" aria-hidden="true" />
+          <div className="about-design-hero-content">
+            <h1 id="about-design-title">{aboutPageContent.hero.title}</h1>
+            <p className="about-design-hero-subtitle">{aboutPageContent.hero.subtitle}</p>
+            <p>{aboutPageContent.hero.description}</p>
           </div>
         </section>
 
-        <section className="zas-philosophy-section" data-reveal>
-          <div className="zas-philosophy-header">
+        <section className="about-design-identity" aria-labelledby="about-identity-title" data-reveal>
+          <header className="about-design-section-header">
             <SiteSectionHeading
-              eyebrow="What Guides Us"
-              title="Our Philosophy"
-              description="The principles that shape how we work, partner, and create value across the ecosystem."
+              title={aboutPageContent.identity.title}
+              description={aboutPageContent.identity.subtitle}
+              align="center"
+              titleId="about-identity-title"
+            />
+          </header>
+          <div className="about-design-identity-content">
+            <p>{aboutPageContent.identity.description}</p>
+            <div className="about-design-identity-image">
+              <Image
+                src={aboutPageContent.identity.image}
+                alt={aboutPageContent.identity.imageAlt}
+                fill
+                sizes="(max-width: 760px) 100vw, 40vw"
+              />
+            </div>
+          </div>
+        </section>
+
+        <section className="about-design-direction" aria-labelledby="about-direction-title" data-reveal>
+          <div className="about-design-direction-image">
+            <Image
+              src={aboutPageContent.direction.image}
+              alt={aboutPageContent.direction.imageAlt}
+              fill
+              sizes="(max-width: 760px) 100vw, 50vw"
             />
           </div>
-          <div className="zas-philosophy-grid">
-            {aboutContent.philosophy.map((principle, index) => (
-              <article className="zas-philosophy-card" key={principle.title}>
-                <span>0{index + 1}</span>
-                <div className="zas-philosophy-mark" aria-hidden="true">
-                  {index === 0 ? "↗" : index === 1 ? "◌" : "∞"}
+          <div className="about-design-direction-copy">
+            <SiteSectionHeading
+              title={aboutPageContent.direction.title}
+              description={aboutPageContent.direction.subtitle}
+            />
+            <p>{aboutPageContent.direction.description}</p>
+          </div>
+        </section>
+
+        <section className="about-design-philosophy" aria-labelledby="about-philosophy-title" data-reveal>
+          <header className="about-design-philosophy-header">
+            <SiteSectionHeading
+              eyebrow={aboutPageContent.philosophy.eyebrow}
+              title={aboutPageContent.philosophy.title}
+              description={aboutPageContent.philosophy.subtitle}
+              titleId="about-philosophy-title"
+            />
+          </header>
+          <div className="about-design-principles">
+            {aboutPageContent.philosophy.principles.map((principle) => (
+              <article className="about-design-principle" key={principle.title}>
+                <div className="about-design-principle-image">
+                  <Image
+                    src={principle.image}
+                    alt={principle.imageAlt}
+                    fill
+                    sizes="(max-width: 680px) 100vw, 30vw"
+                  />
                 </div>
                 <h3>{principle.title}</h3>
                 <p>{principle.description}</p>
@@ -88,22 +105,28 @@ export default function AboutPage() {
           </div>
         </section>
 
-        <section className="zas-founder-profiles-section" id="founders" data-reveal>
-          <div className="zas-founder-profiles-intro">
+        <section className="about-design-founders" id="founders" aria-labelledby="about-founders-title">
+          <header className="about-design-founders-header">
             <SiteSectionHeading
-              eyebrow="The People Behind the Vision"
-              title="Meet Our Founders"
-              description="The people bringing the Zamzameena vision to life. Individual biographies and roles will be updated with approved information."
+              title={aboutPageContent.founders.title}
+              description={aboutPageContent.founders.subtitle}
+              align="center"
+              titleId="about-founders-title"
             />
-          </div>
-          <div className="zas-founder-profiles-list">
-            {founders.map((founder, index) => (
-              <FounderProfile founder={founder} index={index} key={founder.name} />
+          </header>
+          <div className="about-design-founders-list">
+            {aboutPageContent.founders.people.map((founder, index) => (
+              <FounderCard
+                founder={founder}
+                index={index}
+                key={founder.name}
+                variant="profile"
+              />
             ))}
           </div>
         </section>
 
-        <CtaBanner />
+        <CtaBanner variant="home-design" />
       </main>
     </SiteFrame>
   );
