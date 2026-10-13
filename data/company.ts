@@ -22,33 +22,6 @@ export const navItems = [
   { label: "Contact", href: "/contact" },
 ];
 
-export const heroSlides = [
-  {
-    eyebrow: "Intelligence Business Ecosystem",
-    title: "Building an Intelligence Business Ecosystem",
-    text: "Connecting products, people, technology, and business intelligence through an integrated ecosystem.",
-    image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1600&q=80",
-  },
-  {
-    eyebrow: "From Market to Intelligence",
-    title: "From Market to Intelligence",
-    text: "An integrated business architecture designed to connect market demand, supply, distribution, and data.",
-    image: "https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1600&q=80",
-  },
-  {
-    eyebrow: "Creating Value Together",
-    title: "Creating Value Together",
-    text: "Building sustainable growth through interdependence, collaboration, and co-creation of value.",
-    image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1600&q=80",
-  },
-  {
-    eyebrow: "Smart Market. Connected Business.",
-    title: "Smart Market. Connected Business.",
-    text: "An asset-light business model supported by technology, data, and strategic partnerships.",
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1600&q=80",
-  },
-];
-
 export const triangleSystem = [
   {
     title: "Interdependence",
