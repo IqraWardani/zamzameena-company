@@ -4,28 +4,28 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: {
-    default: "Beranda | PT Zamzameena Ainsa Synergy",
-    template: "%s | PT Zamzameena Ainsa Synergy",
+    default: "Zamzameena Ainsa Synergy | Intelligence Business Ecosystem",
+    template: "%s | Zamzameena Ainsa Synergy",
   },
-  description: "PT Zamzameena Ainsa Synergy membangun ekosistem bisnis digital yang menghubungkan pasar, data, dan mitra.",
+  description:
+    "Zamzameena Ainsa Synergy connects businesses, partners, and markets through an intelligence-led business ecosystem.",
   icons: {
     icon: "/assets/logo.svg",
   },
   openGraph: {
-    title: "PT Zamzameena Ainsa Synergy",
-    description: "Ekosistem bisnis digital yang menghubungkan pasar, data, dan mitra.",
+    title: "Zamzameena Ainsa Synergy",
+    description:
+      "An intelligence business ecosystem connecting people, markets, and partners.",
     type: "website",
-    siteName: "PT Zamzameena Ainsa Synergy",
+    siteName: "Zamzameena Ainsa Synergy",
   },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="id" suppressHydrationWarning>
+    <html lang="en" data-scroll-behavior="smooth">
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <meta name="theme-color" content="#F4F5F6" />
+        <meta name="theme-color" content="#101820" />
       </head>
       <body>
         {children}

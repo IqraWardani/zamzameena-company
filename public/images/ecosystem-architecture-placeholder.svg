@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1000" viewBox="0 0 1200 1000">
+  <defs><linearGradient id="a" x2="1" y2="1"><stop stop-color="#152e3d"/><stop offset="1" stop-color="#76908a"/></linearGradient></defs>
+  <rect width="1200" height="1000" fill="url(#a)"/>
+  <path d="M160 780V300l260-140v620m40 0V260l270 135v385m45 0V340l265-150v590" fill="none" stroke="#e5d5b5" stroke-opacity=".72" stroke-width="20"/>
+  <path d="M110 780h980M220 355h170m-170 95h170m-170 95h170m-170 95h170m150-315h195m-195 95h195m-195 95h195m-195 95h195m120-140h195m-195 95h195m-195 95h195" stroke="#e9e1ce" stroke-opacity=".35" stroke-width="10"/>
+  <text x="66" y="930" fill="#fff" opacity=".7" font-family="Arial,sans-serif" font-size="27" letter-spacing="7">ARCHITECTURE IMAGE PLACEHOLDER</text>
+</svg>

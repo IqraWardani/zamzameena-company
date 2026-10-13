@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1200" viewBox="0 0 1800 1200">
+  <defs><linearGradient id="b" x2="1" y2="1"><stop stop-color="#122b3a"/><stop offset=".55" stop-color="#52716e"/><stop offset="1" stop-color="#c39a6c"/></linearGradient></defs>
+  <rect width="1800" height="1200" fill="url(#b)"/>
+  <rect x="190" y="150" width="1420" height="570" rx="18" fill="#d9d6c8" opacity=".19"/>
+  <path d="M220 620h1360M360 720l-160 340m1240-340 160 340M440 950h920" stroke="#e8dcc8" stroke-opacity=".6" stroke-width="22" stroke-linecap="round"/>
+  <g fill="#172b38" opacity=".86"><circle cx="500" cy="575" r="67"/><circle cx="790" cy="560" r="70"/><circle cx="1080" cy="570" r="66"/><circle cx="1360" cy="560" r="72"/><path d="M390 760q110-155 220 0v130H390zm285-20q115-180 230 0v150H675zm285 5q120-165 240 0v145H960zm295-15q115-175 230 0v155h-230z"/></g>
+  <rect width="1800" height="1200" fill="#081622" opacity=".25"/>
+  <text x="82" y="1110" fill="#fff" opacity=".75" font-family="Arial,sans-serif" font-size="29" letter-spacing="8">MEETING IMAGE PLACEHOLDER</text>
+</svg>
