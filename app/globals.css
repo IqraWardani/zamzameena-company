@@ -52,7 +52,9 @@ body {
 .zas-motion-ready [data-reveal] {
   opacity: 0;
   transform: translateY(18px);
-  transition: opacity 620ms ease, transform 620ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition:
+    opacity 620ms ease,
+    transform 620ms cubic-bezier(0.2, 0.7, 0.2, 1);
 }
 
 .zas-motion-ready [data-reveal].is-visible {
@@ -85,7 +87,10 @@ body {
   inset: 0 0 auto;
   border-bottom: 1px solid transparent;
   background: transparent;
-  transition: background-color 240ms ease, border-color 240ms ease, box-shadow 240ms ease;
+  transition:
+    background-color 240ms ease,
+    border-color 240ms ease,
+    box-shadow 240ms ease;
 }
 
 .zas-navbar.is-scrolled {
@@ -183,7 +188,10 @@ body {
   border: 1px solid rgb(213 173 120 / 70%);
   border-radius: 3px;
   color: var(--zas-ink);
-  transition: color 180ms ease, background-color 180ms ease, border-color 180ms ease;
+  transition:
+    color 180ms ease,
+    background-color 180ms ease,
+    border-color 180ms ease;
 }
 
 .zas-nav-cta:hover,
@@ -197,7 +205,9 @@ body {
 .zas-mobile-nav a span {
   color: var(--zas-accent);
   font-size: 15px;
-  transition: color 180ms ease, transform 180ms ease;
+  transition:
+    color 180ms ease,
+    transform 180ms ease;
 }
 
 .zas-nav-cta:hover span,
@@ -387,7 +397,10 @@ body {
   font-weight: 700;
   letter-spacing: 0.13em;
   text-transform: uppercase;
-  transition: transform 180ms ease, color 180ms ease, background-color 180ms ease;
+  transition:
+    transform 180ms ease,
+    color 180ms ease,
+    background-color 180ms ease;
 }
 
 .zas-button:hover {
@@ -408,9 +421,7 @@ body {
   isolation: isolate;
   overflow: hidden;
   padding: 92px 32px 98px;
-  background:
-    radial-gradient(ellipse at 76% 55%, rgb(40 67 77 / 54%), transparent 39%),
-    linear-gradient(115deg, #111d25, #192a33 58%, #13212a);
+  background: radial-gradient(ellipse at 76% 55%, rgb(40 67 77 / 54%), transparent 39%), linear-gradient(115deg, #111d25, #192a33 58%, #13212a);
 }
 
 .zas-cta-content {
@@ -485,9 +496,7 @@ body {
   position: absolute;
   z-index: -1;
   inset: 0;
-  background:
-    linear-gradient(90deg, rgb(7 15 22 / 90%) 0%, rgb(7 15 22 / 68%) 44%, rgb(7 15 22 / 22%) 100%),
-    linear-gradient(0deg, rgb(7 15 22 / 64%) 0%, transparent 43%);
+  background: linear-gradient(90deg, rgb(7 15 22 / 90%) 0%, rgb(7 15 22 / 68%) 44%, rgb(7 15 22 / 22%) 100%), linear-gradient(0deg, rgb(7 15 22 / 64%) 0%, transparent 43%);
 }
 
 .zas-home-hero-content {
@@ -883,9 +892,7 @@ body {
   position: absolute;
   z-index: -1;
   inset: 0;
-  background:
-    linear-gradient(90deg, rgb(8 16 23 / 86%), rgb(8 16 23 / 38%) 80%),
-    linear-gradient(0deg, rgb(8 16 23 / 46%), transparent 55%);
+  background: linear-gradient(90deg, rgb(8 16 23 / 86%), rgb(8 16 23 / 38%) 80%), linear-gradient(0deg, rgb(8 16 23 / 46%), transparent 55%);
 }
 
 .zas-inner-hero-content {
@@ -1234,7 +1241,9 @@ body {
 .zas-feature-card {
   min-width: 0;
   background: #1a2830;
-  transition: transform 220ms ease, box-shadow 220ms ease;
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease;
 }
 
 .zas-feature-card:hover {
@@ -1290,7 +1299,9 @@ body {
   right: 18px;
   border-radius: 50%;
   font-size: 14px;
-  transition: color 180ms ease, background-color 180ms ease;
+  transition:
+    color 180ms ease,
+    background-color 180ms ease;
 }
 
 .zas-feature-card:hover .zas-feature-card-arrow {
@@ -1346,9 +1357,7 @@ body {
   margin: 92px auto 18px;
   border: 1px solid rgb(16 24 32 / 14%);
   border-radius: 50%;
-  background:
-    radial-gradient(circle, transparent 45%, rgb(16 24 32 / 4%) 45.2%, transparent 45.5%),
-    repeating-radial-gradient(circle, transparent 0, transparent 86px, rgb(16 24 32 / 8%) 87px, transparent 88px);
+  background: radial-gradient(circle, transparent 45%, rgb(16 24 32 / 4%) 45.2%, transparent 45.5%), repeating-radial-gradient(circle, transparent 0, transparent 86px, rgb(16 24 32 / 8%) 87px, transparent 88px);
 }
 
 .zas-market-system::before,
@@ -1377,7 +1386,9 @@ body {
   border: 1px solid #a77c4f;
   border-radius: 50%;
   background: #f0eee8;
-  box-shadow: 0 0 0 12px #f0eee8, 0 0 0 13px rgb(167 124 79 / 30%);
+  box-shadow:
+    0 0 0 12px #f0eee8,
+    0 0 0 13px rgb(167 124 79 / 30%);
   color: var(--zas-night);
 }
 
@@ -1604,7 +1615,10 @@ body {
     opacity: 0;
     transform: translateY(-8px);
     pointer-events: none;
-    transition: opacity 180ms ease, transform 180ms ease, padding 180ms ease;
+    transition:
+      opacity 180ms ease,
+      transform 180ms ease,
+      padding 180ms ease;
   }
 
   .zas-mobile-nav.is-open {
@@ -1674,9 +1688,7 @@ body {
   }
 
   .zas-home-hero-shade {
-    background:
-      linear-gradient(90deg, rgb(7 15 22 / 84%), rgb(7 15 22 / 42%)),
-      linear-gradient(0deg, rgb(7 15 22 / 70%), transparent 58%);
+    background: linear-gradient(90deg, rgb(7 15 22 / 84%), rgb(7 15 22 / 42%)), linear-gradient(0deg, rgb(7 15 22 / 70%), transparent 58%);
   }
 
   .zas-home-hero-content {
@@ -2052,7 +2064,9 @@ body {
   min-height: 80px;
   gap: 30px;
   margin: 20px auto 0;
-  transition: min-height 200ms ease, margin 200ms ease;
+  transition:
+    min-height 200ms ease,
+    margin 200ms ease;
 }
 
 .home-design .zas-navbar.is-scrolled .zas-navbar-inner {
@@ -2193,7 +2207,9 @@ body {
   letter-spacing: 0.2px;
   line-height: 1.4;
   text-align: center;
-  transition: background-color 180ms ease, transform 180ms ease;
+  transition:
+    background-color 180ms ease,
+    transform 180ms ease;
 }
 
 .home-design-button:hover {
@@ -2429,7 +2445,7 @@ body {
 }
 
 .home-design-founder-card img {
-  object-position: center 32%;
+  object-position: center 10%;
   transition: transform 300ms ease;
 }
 
@@ -2966,9 +2982,7 @@ body {
   position: absolute;
   z-index: -1;
   inset: 0;
-  background:
-    linear-gradient(127deg, rgb(0 0 0 / 58%) 36%, rgb(35 35 35 / 48%) 82%),
-    linear-gradient(0deg, rgb(0 0 0 / 44%), transparent 62%);
+  background: linear-gradient(127deg, rgb(0 0 0 / 58%) 36%, rgb(35 35 35 / 48%) 82%), linear-gradient(0deg, rgb(0 0 0 / 44%), transparent 62%);
 }
 
 .about-design-hero-content {
@@ -3173,18 +3187,20 @@ body {
 .about-design-founders-list {
   display: grid;
   width: min(1062px, 100%);
-  gap: 20px;
+  gap: 150px;
   margin: 0 auto;
 }
 
 .about-design .zas-founder-profile {
   grid-template-columns: minmax(0, 338px) minmax(0, 1fr);
   align-items: center;
-  gap: 51px;
+  column-gap: 51px;
+  row-gap: 0;
 }
 
 .about-design .zas-founder-profile.is-reversed {
   grid-template-columns: minmax(0, 1fr) minmax(0, 338px);
+  column-gap: 51px;
 }
 
 .about-design .zas-founder-profile.is-reversed .zas-founder-profile-image {
@@ -3220,6 +3236,10 @@ body {
   padding: 0;
 }
 
+.about-design .zas-founder-profile:not(.is-reversed) .zas-founder-profile-copy {
+  text-align: right;
+}
+
 .about-design .zas-founder-bio {
   margin: 0;
   color: var(--about-ink);
@@ -3228,6 +3248,12 @@ body {
   letter-spacing: 0.2px;
   line-height: 1.55;
   text-align: justify;
+}
+
+.about-design .zas-founder-profile:not(.is-reversed) .zas-founder-bio {
+  width: min(100%, 470px);
+  margin-left: auto;
+  text-align: right;
 }
 
 .about-design .zas-founder-signature h3 {
@@ -3277,9 +3303,10 @@ body {
     gap: 36px;
   }
 
-  .about-design .zas-founder-profile {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
-    gap: 32px;
+  .about-design .zas-founder-profile,
+  .about-design .zas-founder-profile.is-reversed {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 32px;
   }
 
   .about-design .zas-founder-profile-copy {
@@ -3302,9 +3329,7 @@ body {
   }
 
   .about-design-hero-shade {
-    background:
-      linear-gradient(90deg, rgb(0 0 0 / 67%), rgb(0 0 0 / 30%) 100%),
-      linear-gradient(0deg, rgb(0 0 0 / 55%), transparent 65%);
+    background: linear-gradient(90deg, rgb(0 0 0 / 67%), rgb(0 0 0 / 30%) 100%), linear-gradient(0deg, rgb(0 0 0 / 55%), transparent 65%);
   }
 
   .about-design-hero-content {
