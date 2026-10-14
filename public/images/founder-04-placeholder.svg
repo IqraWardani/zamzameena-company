@@ -1,3 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="800" height="1000" viewBox="0 0 800 1000">
-  <defs><linearGradient id="p" x2="1" y2="1"><stop stop-color="#465365"/><stop offset="1" stop-color="#bda286"/></linearGradient></defs><rect width="800" height="1000" fill="url(#p)"/><circle cx="400" cy="335" r="150" fill="#dfb696"/><path d="M102 1000q18-390 298-390t298 390" fill="#26323d"/><text x="240" y="925" fill="#fff" opacity=".72" font-family="Arial,sans-serif" font-size="27" letter-spacing="6">PORTRAIT PLACEHOLDER</text>
-</svg>

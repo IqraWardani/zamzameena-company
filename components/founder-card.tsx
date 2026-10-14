@@ -1,9 +1,50 @@
 import Image from "next/image";
-import type { founders } from "@/data/site-content";
 
-type Founder = (typeof founders)[number];
+type Founder = {
+  name: string;
+  title: string;
+  bio?: string;
+  image: string;
+  imageAlt: string;
+};
 
-export function FounderCard({ founder }: { founder: Founder }) {
+type FounderCardProps = {
+  founder: Founder;
+  variant?: "card" | "profile";
+  index?: number;
+};
+
+export function FounderCard({
+  founder,
+  variant = "card",
+  index = 0,
+}: FounderCardProps) {
+  if (variant === "profile") {
+    return (
+      <article
+        className={`zas-founder-profile${index % 2 === 1 ? " is-reversed" : ""}`}
+        data-reveal
+      >
+        <div className="zas-founder-profile-image">
+          <Image
+            src={founder.image}
+            alt={founder.imageAlt}
+            fill
+            loading="lazy"
+            sizes="(max-width: 680px) 100vw, (max-width: 900px) 45vw, 338px"
+          />
+        </div>
+        <div className="zas-founder-profile-copy">
+          {founder.bio ? <p className="zas-founder-bio">{founder.bio}</p> : null}
+          <div className="zas-founder-signature">
+            <h3>{founder.name}</h3>
+            <p className="zas-eyebrow">{founder.title}</p>
+          </div>
+        </div>
+      </article>
+    );
+  }
+
   return (
     <article className="zas-founder-card" data-reveal>
       <div className="zas-founder-image">

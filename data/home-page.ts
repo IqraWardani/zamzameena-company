@@ -9,8 +9,7 @@ export const homeNavigation = [
 export const homePageContent = {
   hero: {
     title: "Zamzameena Ainsa Synergy",
-    quote:
-      "“ZAS tidak sekedar mendistribusikan produk, melainkan membangun infrastruktur kecerdasan pasar tempat seluruh entitas usaha tumbuh dan menciptakan nilai tambah secara berkelanjutan.”",
+    quote: "“ZAS tidak sekedar mendistribusikan produk, melainkan membangun infrastruktur kecerdasan pasar tempat seluruh entitas usaha tumbuh dan menciptakan nilai tambah secara berkelanjutan.”",
     image: "/images/figma/home-hero.webp",
     imageAlt: "Pemandangan udara gedung-gedung kota Jakarta saat matahari terbenam",
     buttonLabel: "Business Model",
@@ -83,7 +82,7 @@ export const homePageContent = {
     people: [
       {
         name: "Founder 1",
-        image: "/images/figma/founder-01.webp",
+        image: "/images/figma/founder-001.webp",
         imageAlt: "Potret pendiri Zamzameena pertama",
       },
       {
