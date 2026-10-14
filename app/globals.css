@@ -2060,7 +2060,7 @@ body {
 }
 
 .home-design .zas-navbar-inner {
-  width: calc(100% - 120px);
+  width: min(1430px, calc(100% - 120px));
   min-height: 80px;
   gap: 30px;
   margin: 20px auto 0;
@@ -2594,7 +2594,7 @@ body {
 
 @media (max-width: 1100px) {
   .home-design .zas-navbar-inner {
-    width: calc(100% - 64px);
+    width: calc(100% - 80px);
   }
 
   .home-design .zas-desktop-nav {
@@ -2652,7 +2652,7 @@ body {
 
 @media (max-width: 760px) {
   .home-design .zas-navbar-inner {
-    width: calc(100% - 40px);
+    width: calc(100% - 44px);
     min-height: 72px;
     margin-top: 8px;
   }
