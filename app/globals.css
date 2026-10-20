@@ -2841,11 +2841,22 @@ body {
   }
 
   .home-design-founders-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
   }
 
   .home-design-founder-card {
+    grid-column: auto;
     border-radius: 8px;
+  }
+
+  .home-design-founder-card:nth-child(4),
+  .home-design-founder-card:nth-child(5) {
+    grid-column: auto;
+  }
+
+  .home-design-founder-card:first-child {
+    grid-column: 1 / -1;
   }
 
   .home-design-founders > .home-design-button {
@@ -2915,18 +2926,6 @@ body {
 
   .home-design-architecture-grid {
     height: 270px;
-  }
-
-  .home-design-founder-card {
-    grid-column: span 3;
-  }
-
-  .home-design-founder-card:nth-child(4) {
-    grid-column: 1 / span 3;
-  }
-
-  .home-design-founder-card:nth-child(5) {
-    grid-column: 2 / span 3;
   }
 }
 
