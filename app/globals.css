@@ -1607,8 +1607,11 @@ body {
     right: 0;
     left: 0;
     display: flex;
+    max-height: calc(100dvh - 90px);
     flex-direction: column;
     gap: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
     padding: 0 20px;
     border-bottom: 1px solid transparent;
     background: rgb(11 17 23 / 98%);
@@ -2647,6 +2650,601 @@ body {
 
   .home-design-footer-main {
     gap: 80px;
+  }
+}
+
+.zas-site a:focus-visible,
+.zas-site button:focus-visible {
+  outline: 2px solid var(--zas-accent);
+  outline-offset: 4px;
+}
+
+.zas-nav-dropdown {
+  position: relative;
+}
+
+.zas-nav-dropdown-trigger {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 12px 0;
+  border: 0;
+  background: transparent;
+  color: rgb(245 243 238 / 78%);
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: color 180ms ease;
+}
+
+.zas-nav-dropdown-trigger > span {
+  color: var(--zas-accent);
+  font-size: 15px;
+  line-height: 1;
+}
+
+.zas-nav-dropdown-trigger:hover,
+.zas-nav-dropdown-trigger[aria-expanded="true"],
+.zas-nav-dropdown-trigger.is-current {
+  color: var(--zas-ink);
+}
+
+.zas-nav-dropdown-menu {
+  position: absolute;
+  z-index: 60;
+  top: calc(100% + 10px);
+  left: -20px;
+  display: grid;
+  min-width: 220px;
+  gap: 2px;
+  padding: 10px;
+  border: 1px solid var(--zas-line);
+  background: rgb(11 17 23 / 98%);
+  box-shadow: 0 16px 36px rgb(0 0 0 / 22%);
+}
+
+.zas-nav-dropdown-menu[hidden],
+.zas-mobile-submenu[hidden] {
+  display: none;
+}
+
+.zas-nav-dropdown-menu a {
+  padding: 11px 12px;
+  color: rgb(245 243 238 / 76%);
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
+
+.zas-nav-dropdown-menu a:hover,
+.zas-nav-dropdown-menu a[aria-current="page"] {
+  background: rgb(213 173 120 / 12%);
+  color: var(--zas-accent);
+}
+
+.home-design .zas-nav-dropdown-trigger {
+  padding: 8px 0;
+  color: rgb(255 255 255 / 72%);
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  text-transform: none;
+}
+
+.home-design .zas-nav-dropdown-trigger:hover,
+.home-design .zas-nav-dropdown-trigger[aria-expanded="true"],
+.home-design .zas-nav-dropdown-trigger.is-current {
+  color: #fff;
+}
+
+.home-design .zas-nav-dropdown-menu {
+  border-color: rgb(255 255 255 / 16%);
+  border-radius: 8px;
+  background: rgb(17 17 17 / 96%);
+}
+
+@media (max-width: 1100px) {
+  .zas-navbar-inner,
+  .home-design .zas-navbar-inner {
+    width: calc(100% - 44px);
+  }
+
+  .zas-desktop-nav,
+  .zas-nav-cta {
+    display: none;
+  }
+
+  .zas-navbar-actions {
+    min-width: 0;
+  }
+
+  .zas-menu-toggle {
+    display: flex;
+    width: 42px;
+    height: 42px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    border: 1px solid rgb(255 255 255 / 35%);
+    border-radius: 50%;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .zas-menu-toggle span {
+    width: 16px;
+    height: 1px;
+    background: var(--zas-ink);
+  }
+
+  .zas-mobile-nav {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 0 22px;
+    border-bottom: 1px solid transparent;
+    background: rgb(11 17 23 / 98%);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-8px);
+    transition:
+      opacity 180ms ease,
+      transform 180ms ease,
+      padding 180ms ease;
+  }
+
+  .zas-mobile-nav.is-open {
+    padding-top: 8px;
+    padding-bottom: 20px;
+    border-color: var(--zas-line);
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  .zas-mobile-nav > a:not(.zas-mobile-cta),
+  .zas-mobile-nav-parent {
+    display: flex;
+    width: 100%;
+    min-height: 52px;
+    align-items: center;
+    justify-content: space-between;
+    border: 0;
+    border-bottom: 1px solid var(--zas-line);
+    background: transparent;
+    color: var(--zas-ink);
+    text-align: left;
+  }
+
+  .zas-mobile-nav-parent {
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .zas-mobile-nav-parent.is-current,
+  .zas-mobile-nav-parent[aria-expanded="true"] {
+    color: var(--zas-accent);
+  }
+
+  .zas-mobile-nav-parent > span,
+  .zas-mobile-nav > a:not(.zas-mobile-cta) > span {
+    color: var(--zas-accent);
+    font-size: 15px;
+  }
+
+  .zas-mobile-submenu {
+    display: grid;
+    padding: 4px 0 8px 12px;
+    border-bottom: 1px solid var(--zas-line);
+  }
+
+  .zas-mobile-submenu a {
+    min-height: 42px;
+    align-content: center;
+    color: rgb(245 243 238 / 74%);
+    font-size: 12px;
+    letter-spacing: 0.02em;
+    text-transform: none;
+  }
+
+  .zas-mobile-submenu a[aria-current="page"] {
+    color: var(--zas-accent);
+  }
+
+  .zas-mobile-cta {
+    align-self: flex-start;
+    margin-top: 18px;
+  }
+
+  .home-design .zas-mobile-nav {
+    background: rgb(17 17 17 / 96%);
+  }
+
+  .home-design .zas-mobile-nav-parent {
+    min-height: 50px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.2px;
+    text-transform: none;
+  }
+
+  .home-design .zas-mobile-nav-parent > span,
+  .home-design .zas-mobile-nav > a:not(.zas-mobile-cta) > span {
+    color: #bdbdbd;
+  }
+}
+
+.zas-breadcrumbs {
+  margin-bottom: 26px;
+}
+
+.zas-breadcrumbs ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 9px;
+  margin: 0;
+  padding: 0;
+  color: rgb(245 243 238 / 68%);
+  font-size: 11px;
+  letter-spacing: 0.05em;
+  list-style: none;
+}
+
+.zas-breadcrumbs li + li::before {
+  margin-right: 9px;
+  color: var(--zas-accent);
+  content: "/";
+}
+
+.zas-breadcrumbs a:hover {
+  color: var(--zas-accent);
+}
+
+.zas-breadcrumbs [aria-current="page"] {
+  color: var(--zas-ink);
+}
+
+.zas-content-page-hero {
+  position: relative;
+  display: flex;
+  min-height: 570px;
+  align-items: center;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 82% 35%, rgb(213 173 120 / 15%), transparent 34%),
+    linear-gradient(125deg, #101820 0%, #17232b 70%, #1c2a31 100%);
+}
+
+.zas-content-page-hero::after {
+  position: absolute;
+  right: -120px;
+  bottom: -240px;
+  width: 520px;
+  height: 520px;
+  border: 1px solid rgb(213 173 120 / 15%);
+  border-radius: 50%;
+  content: "";
+  pointer-events: none;
+}
+
+.zas-content-page-hero-content {
+  position: relative;
+  z-index: 1;
+  width: min(var(--zas-content-width), calc(100% - 64px));
+  margin: 100px auto 48px;
+}
+
+.zas-content-page-hero h1 {
+  max-width: 880px;
+  margin: 0;
+  color: var(--zas-ink);
+  font-size: clamp(52px, 8vw, 94px);
+  font-weight: 500;
+  letter-spacing: -0.07em;
+  line-height: 1;
+}
+
+.zas-content-page-hero .zas-eyebrow {
+  margin-bottom: 18px;
+  color: var(--zas-accent);
+}
+
+.zas-content-page-hero-description {
+  max-width: 660px;
+  margin: 24px 0 0;
+  color: rgb(245 243 238 / 76%);
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+.zas-content-page-section {
+  padding: 100px 32px 120px;
+  background: #f0eee8;
+  color: var(--zas-night);
+}
+
+.zas-content-page-section-inner {
+  width: min(940px, 100%);
+  margin: 0 auto;
+}
+
+.zas-content-page-section .zas-eyebrow {
+  color: #9c7044;
+}
+
+.zas-content-page-section h2 {
+  max-width: 700px;
+  margin: 12px 0 0;
+  color: var(--zas-night);
+  font-size: clamp(32px, 5vw, 52px);
+  font-weight: 500;
+  letter-spacing: -0.055em;
+  line-height: 1.08;
+}
+
+.zas-content-page-section-intro {
+  max-width: 700px;
+  margin: 20px 0 0;
+  color: #596368;
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+.zas-placeholder-panel {
+  margin-top: 42px;
+  padding: 28px 30px;
+  border: 1px solid rgb(16 24 32 / 14%);
+  background: rgb(255 255 255 / 55%);
+}
+
+.zas-placeholder-panel strong {
+  display: block;
+  color: #9c7044;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.zas-placeholder-panel p {
+  margin: 12px 0 0;
+  color: #596368;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.zas-about-strategy-section .zas-content-page-section-inner {
+  width: min(1040px, 100%);
+}
+
+.zas-about-strategy-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin: 42px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.zas-about-strategy-card {
+  height: 100%;
+  padding: 28px;
+  border: 1px solid rgb(16 24 32 / 14%);
+  background: rgb(255 255 255 / 55%);
+}
+
+.zas-about-strategy-index {
+  display: block;
+  margin-bottom: 24px;
+  color: #9c7044;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+
+.zas-about-strategy-label {
+  margin: 0 0 10px;
+  color: #9c7044;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  line-height: 1.6;
+  text-transform: uppercase;
+}
+
+.zas-about-strategy-card h3 {
+  margin: 0;
+  color: var(--zas-night);
+  font-size: 22px;
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 1.2;
+}
+
+.zas-about-strategy-copy,
+.zas-about-strategy-closing p {
+  margin: 14px 0 0;
+  color: #596368;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.zas-about-strategy-closing {
+  margin-top: 32px;
+  padding: 28px;
+  border-left: 2px solid var(--zas-accent);
+  background: rgb(255 255 255 / 45%);
+}
+
+.zas-about-strategy-closing h2 {
+  margin: 0;
+  color: var(--zas-night);
+  font-size: 24px;
+  font-weight: 500;
+  letter-spacing: -0.035em;
+}
+
+@media (max-width: 680px) {
+  .zas-content-page-hero {
+    min-height: 520px;
+  }
+
+  .zas-content-page-hero-content {
+    width: calc(100% - 44px);
+    margin: 94px auto 36px;
+  }
+
+  .zas-content-page-hero h1 {
+    font-size: clamp(46px, 12vw, 68px);
+  }
+
+  .zas-content-page-section {
+    padding: 76px 22px 88px;
+  }
+
+  .zas-placeholder-panel {
+    padding: 22px;
+  }
+
+  .zas-about-strategy-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+    margin-top: 34px;
+  }
+
+  .zas-about-strategy-card,
+  .zas-about-strategy-closing {
+    padding: 22px;
+  }
+}
+
+.zas-technology-section,
+.zas-technology-discipline {
+  padding: 100px 32px 112px;
+  background: #f0eee8;
+  color: var(--zas-night);
+}
+
+.zas-technology-section-inner {
+  width: min(var(--zas-content-width), 100%);
+  margin: 0 auto;
+}
+
+.zas-technology-section .zas-section-heading h2,
+.zas-technology-discipline .zas-section-heading h2 {
+  color: var(--zas-night);
+}
+
+.zas-technology-section .zas-section-description,
+.zas-technology-discipline .zas-section-description {
+  color: #596368;
+}
+
+.zas-technology-card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  margin-top: 48px;
+}
+
+.zas-technology-card {
+  overflow: hidden;
+  border: 1px solid rgb(16 24 32 / 12%);
+  background: #fff;
+}
+
+.zas-technology-card-image {
+  min-height: 220px;
+  background-position: center;
+  background-size: cover;
+}
+
+.zas-technology-card-copy {
+  padding: 24px;
+}
+
+.zas-technology-card-copy p:first-child {
+  margin: 0;
+  color: #9c7044;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.zas-technology-card-copy h3 {
+  margin: 12px 0 0;
+  color: var(--zas-night);
+  font-size: 22px;
+  letter-spacing: -0.035em;
+}
+
+.zas-technology-card-copy p:last-child {
+  margin: 14px 0 0;
+  color: #596368;
+  font-size: 14px;
+  line-height: 1.75;
+}
+
+.zas-technology-discipline {
+  background: var(--zas-night);
+  color: var(--zas-ink);
+}
+
+.zas-technology-discipline .zas-section-heading h2 {
+  color: var(--zas-ink);
+}
+
+.zas-technology-discipline .zas-section-description {
+  color: var(--zas-muted);
+}
+
+.zas-technology-principles {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 42px;
+}
+
+.zas-technology-principles article {
+  padding: 26px;
+  border: 1px solid var(--zas-line);
+  background: var(--zas-surface);
+}
+
+.zas-technology-principles h3 {
+  margin: 0;
+  color: var(--zas-ink);
+  font-size: 18px;
+}
+
+.zas-technology-principles p {
+  margin: 13px 0 0;
+  color: var(--zas-muted);
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+@media (max-width: 760px) {
+  .zas-technology-card-grid,
+  .zas-technology-principles {
+    grid-template-columns: 1fr;
+  }
+
+  .zas-technology-section,
+  .zas-technology-discipline {
+    padding: 76px 22px 88px;
   }
 }
 

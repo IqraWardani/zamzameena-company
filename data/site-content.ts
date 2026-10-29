@@ -1,7 +1,39 @@
-export const siteNavigation = [
+export type SiteNavigationItem =
+  | { label: string; href: string; children?: never }
+  | { label: string; href?: never; children: { label: string; href: string }[] };
+
+export const siteNavigation: SiteNavigationItem[] = [
   { label: "Home", href: "/" },
-  { label: "About", href: "/about" },
-  { label: "Business", href: "/business" },
+  {
+    label: "About",
+    children: [
+      { label: "Company Profile", href: "/about/company-profile" },
+      { label: "Vision & Mission", href: "/about/vision-mission" },
+      { label: "Corporate Goals", href: "/about/corporate-goals" },
+      { label: "Certifications", href: "/about/certifications" },
+      { label: "Business", href: "/about/business" },
+      { label: "Technology", href: "/about/technology" },
+    ],
+  },
+  {
+    label: "Management",
+    children: [
+      { label: "Struktur", href: "/management/struktur" },
+      { label: "Pendiri", href: "/management/pendiri" },
+      { label: "Direksi", href: "/management/direksi" },
+      { label: "SDM", href: "/management/sdm" },
+    ],
+  },
+  {
+    label: "Media",
+    children: [
+      { label: "Zamzameena Live", href: "/media/zamzameena-live" },
+      { label: "Social Media", href: "/media/social-media" },
+    ],
+  },
+  { label: "Marketing", href: "/marketing" },
+  { label: "Career", href: "/career" },
+  { label: "Contact", href: "/contact" },
 ];
 
 export const companyContent = {
@@ -74,11 +106,19 @@ export const callToAction = {
   description:
     "Join us in shaping a more connected and collaborative business ecosystem.",
   buttonLabel: "Explore Our Business",
-  href: "/business",
+  href: "/about/business",
 };
 
 export const footerContent = {
-  quickLinks: siteNavigation,
+  quickLinks: [
+    { label: "Home", href: "/" },
+    { label: "Company Profile", href: "/about/company-profile" },
+    { label: "Business", href: "/about/business" },
+    { label: "Technology", href: "/about/technology" },
+    { label: "Marketing", href: "/marketing" },
+    { label: "Career", href: "/career" },
+    { label: "Contact", href: "/contact" },
+  ],
   connectLabel: "Connect",
   email: "[Add official company email]",
   socialLinks: [

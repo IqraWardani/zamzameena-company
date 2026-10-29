@@ -26,7 +26,7 @@ export function SiteFooter() {
       <div className="zas-footer-main">
         <div className="zas-footer-brand-block">
           <Link className="zas-brand zas-footer-brand" href="/" aria-label={`${companyContent.name} home`}>
-            <Image className="zas-brand-logo" src="/assets/logo.svg" alt="" width={42} height={42} />
+            <Image className="zas-brand-logo" src="/assets/logo.png" alt="" width={42} height={42} />
             <span>Zamzameena</span>
           </Link>
           <p>{companyContent.description}</p>

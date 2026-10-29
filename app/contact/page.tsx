@@ -1,4 +1,5 @@
 import { StaticDesignPage } from "@/components/static-design-page";
+import { SiteFrame } from "@/components/site-frame";
 
 export const metadata = {
   title: "Hubungi Kami",
@@ -6,5 +7,9 @@ export const metadata = {
 };
 
 export default function ContactPage() {
-  return <StaticDesignPage fileName="hubungi.html" />;
+  return (
+    <SiteFrame>
+      <StaticDesignPage fileName="hubungi.html" useSiteChrome />
+    </SiteFrame>
+  );
 }
