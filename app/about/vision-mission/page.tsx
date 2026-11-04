@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
-import { AboutStrategyPage } from "@/components/about-strategy-page";
-import { visionMissionPage } from "@/data/about-strategy-pages";
+import { VisionMissionPageContent } from "@/components/vision-mission-page-content";
 
 export const metadata: Metadata = {
   title: "Vision & Mission",
   description:
-    "This page is prepared for Zamzameena Ainsa Synergy's approved vision and mission statements.",
+    "The principles behind Zamzameena Ainsa Synergy's business ecosystem: our vision and mission.",
 };
 
 export default function VisionMissionPage() {
-  return <AboutStrategyPage page={visionMissionPage} />;
+  return <VisionMissionPageContent />;
 }

@@ -6,10 +6,6 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 import { siteNavigation } from "@/data/site-content";
 
-type SiteNavbarProps = {
-  variant?: "default" | "home-design";
-};
-
 function isActivePath(pathname: string, href: string) {
   return pathname === href || (href !== "/" && pathname.startsWith(`${href}/`));
 }
@@ -18,7 +14,7 @@ function menuId(label: string) {
   return `zas-menu-${label.toLowerCase().replaceAll(" ", "-")}`;
 }
 
-export function SiteNavbar({ variant = "default" }: SiteNavbarProps) {
+export function SiteNavbar() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -27,8 +23,6 @@ export function SiteNavbar({ variant = "default" }: SiteNavbarProps) {
   const menuToggleRef = useRef<HTMLButtonElement>(null);
   const desktopTriggers = useRef<Record<string, HTMLButtonElement | null>>({});
   const [previousPathname, setPreviousPathname] = useState(pathname);
-  const isHomeDesign = variant === "home-design";
-
   if (previousPathname !== pathname) {
     setPreviousPathname(pathname);
     setMenuOpen(false);
@@ -90,20 +84,19 @@ export function SiteNavbar({ variant = "default" }: SiteNavbarProps) {
 
   return (
     <header
-      className={`zas-navbar${scrolled ? " is-scrolled" : ""}${isHomeDesign ? " home-design-navbar" : ""}`}
+      className={`zas-navbar home-design-navbar${scrolled ? " is-scrolled" : ""}`}
       onKeyDown={closeOnEscape}
       ref={headerRef}
     >
       <div className="zas-navbar-inner">
         <Link className="zas-brand" href="/" aria-label="Zamzameena Ainsa Synergy home">
           <Image
-            src={isHomeDesign ? "/images/figma/zas-mark.webp" : "/assets/logo.png"}
+            src="/images/figma/zas-mark.webp"
             alt=""
             width={40}
             height={40}
             priority
           />
-          {!isHomeDesign ? <span>Zamzameena</span> : null}
         </Link>
 
         <nav className="zas-desktop-nav" aria-label="Main navigation">
@@ -159,10 +152,7 @@ export function SiteNavbar({ variant = "default" }: SiteNavbarProps) {
         </nav>
 
         <div className="zas-navbar-actions">
-          <Link className="zas-nav-cta" href={isHomeDesign ? "/contact" : "/about/business"}>
-            {isHomeDesign ? "Contact Us" : "Partner With Us"}
-            {!isHomeDesign ? <span aria-hidden="true">↗</span> : null}
-          </Link>
+          <Link className="zas-nav-cta" href="/contact">Contact Us</Link>
           <button
             className={`zas-menu-toggle${menuOpen ? " is-open" : ""}`}
             type="button"
@@ -240,10 +230,10 @@ export function SiteNavbar({ variant = "default" }: SiteNavbarProps) {
         })}
         <Link
           className="zas-mobile-cta"
-          href={isHomeDesign ? "/contact" : "/about/business"}
+          href="/contact"
           onClick={() => setMenuOpen(false)}
         >
-          {isHomeDesign ? "Contact Us" : "Partner With Us"} <span aria-hidden="true">↗</span>
+          Contact Us
         </Link>
       </nav>
     </header>

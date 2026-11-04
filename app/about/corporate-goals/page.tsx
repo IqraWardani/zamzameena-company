@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
-import { AboutStrategyPage } from "@/components/about-strategy-page";
-import { corporateGoalsPage } from "@/data/about-strategy-pages";
+import { CorporateGoalsPageContent } from "@/components/corporate-goals-page-content";
 
 export const metadata: Metadata = {
   title: "Corporate Goals",
   description:
-    "Review a structured framework for Zamzameena Ainsa Synergy's corporate goals, with suggested categories pending approval.",
+    "Our corporate goals define the direction of our growth and guide the development of an interconnected, resilient business ecosystem.",
 };
 
 export default function CorporateGoalsPage() {
-  return <AboutStrategyPage page={corporateGoalsPage} />;
+  return <CorporateGoalsPageContent />;
 }

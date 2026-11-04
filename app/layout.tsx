@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import Script from "next/script";
+import { SiteFooter } from "@/components/site-footer";
+import { SiteNavbar } from "@/components/site-navbar";
+import { ScrollRevealObserver } from "@/components/scroll-reveal-observer";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -28,7 +31,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <meta name="theme-color" content="#101820" />
       </head>
       <body>
-        {children}
+        <div className="zas-site">
+          <a className="zas-skip-link" href="#main-content">Skip to content</a>
+          <SiteNavbar />
+          <ScrollRevealObserver />
+          {children}
+          <SiteFooter />
+        </div>
         <Script src="/js/main.js" strategy="afterInteractive" />
       </body>
     </html>

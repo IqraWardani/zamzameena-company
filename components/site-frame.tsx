@@ -1,8 +1,4 @@
 import type { ReactNode } from "react";
-import { HomeFooter } from "@/components/home/home-footer";
-import { SiteFooter } from "@/components/site-footer";
-import { SiteNavbar } from "@/components/site-navbar";
-import { ScrollRevealObserver } from "@/components/scroll-reveal-observer";
 
 type SiteFrameProps = {
   children: ReactNode;
@@ -12,14 +8,12 @@ type SiteFrameProps = {
 export function SiteFrame({ children, variant = "default" }: SiteFrameProps) {
   const usesHomeDesign = variant !== "default";
   const isAboutDesign = variant === "about-design";
+  const className = [
+    usesHomeDesign && "home-design",
+    isAboutDesign && "about-site",
+  ]
+    .filter(Boolean)
+    .join(" ");
 
-  return (
-    <div className={`zas-site${usesHomeDesign ? " home-design" : ""}${isAboutDesign ? " about-site" : ""}`}>
-      <a className="zas-skip-link" href="#main-content">Skip to content</a>
-      <SiteNavbar variant={usesHomeDesign ? "home-design" : "default"} />
-      <ScrollRevealObserver />
-      {children}
-      {usesHomeDesign ? <HomeFooter /> : <SiteFooter />}
-    </div>
-  );
+  return className ? <div className={className}>{children}</div> : children;
 }
