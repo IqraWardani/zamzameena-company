@@ -5,9 +5,15 @@ import { callToAction } from "@/data/site-content";
 
 type CtaBannerProps = {
   variant?: "default" | "home-design";
+  image?: string;
+  imageAlt?: string;
 };
 
-export function CtaBanner({ variant = "default" }: CtaBannerProps) {
+export function CtaBanner({
+  variant = "default",
+  image,
+  imageAlt,
+}: CtaBannerProps) {
   if (variant === "home-design") {
     const { cta } = homePageContent;
 
@@ -15,8 +21,8 @@ export function CtaBanner({ variant = "default" }: CtaBannerProps) {
       <section className="zas-cta-banner home-design-cta" aria-labelledby="home-design-cta-title">
         <Image
           className="home-design-cta-image"
-          src={cta.image}
-          alt={cta.imageAlt}
+          src={image ?? cta.image}
+          alt={imageAlt ?? cta.imageAlt}
           fill
           sizes="100vw"
         />

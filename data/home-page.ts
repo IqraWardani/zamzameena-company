@@ -1,11 +1,3 @@
-export const homeNavigation = [
-  { label: "Home", href: "/" },
-  { label: "About", href: "/about" },
-  { label: "Business", href: "/business" },
-  { label: "Technology", href: "/product-knowledge" },
-  { label: "Contact", href: "/contact" },
-];
-
 export const homePageContent = {
   hero: {
     title: "Zamzameena Ainsa Synergy",
@@ -13,7 +5,7 @@ export const homePageContent = {
     image: "/images/figma/home-hero.webp",
     imageAlt: "Pemandangan udara gedung-gedung kota Jakarta saat matahari terbenam",
     buttonLabel: "Business Model",
-    href: "/business",
+    href: "/about/business",
   },
   highlights: [
     {
@@ -62,7 +54,7 @@ export const homePageContent = {
     description:
       "Berdasarkan kerangka kerja konseptualnya, perusahaan tidak sekadar menjalankan fungsi perdagangan, melainkan merekayasa sebuah ekosistem ekonomi sirkular (Smart Market) yang digerakkan oleh kecerdasan data (One Data Center), dikelola tanpa beban aset berlebih (Asset-Light), dan didistribusikan melalui jaringan kemitraan yang teredukasi.",
     buttonLabel: "Learn More",
-    href: "/business",
+    href: "/about/business",
     images: [
       {
         src: "/images/figma/market-warehouse.webp",
@@ -78,7 +70,7 @@ export const homePageContent = {
     title: "Founders",
     subtitle: "The Vision Behind Zamzameena",
     buttonLabel: "The Founders' Vision",
-    href: "/about#founders",
+    href: "/about/company-profile#founders",
     people: [
       {
         name: "Founder 1",
@@ -118,10 +110,10 @@ export const homePageContent = {
     description: "Building Connected Business Ecosystems",
     email: "zamzameenaainsa@gmail.com",
     quickLinks: [
-      { label: "Company", href: "/" },
-      { label: "About", href: "/about" },
-      { label: "Business", href: "/business" },
-      { label: "Technology", href: "/product-knowledge" },
+      { label: "Home", href: "/" },
+      { label: "Company Profile", href: "/about/company-profile" },
+      { label: "Business", href: "/about/business" },
+      { label: "Technology", href: "/about/technology" },
       { label: "Contact", href: "/contact" },
     ],
     socialIcons: [

@@ -1,4 +1,4 @@
-import { StaticDesignPage } from "@/components/static-design-page";
+import { redirect } from "next/navigation";
 
 export const metadata = {
   title: "Struktur Organisasi",
@@ -6,5 +6,5 @@ export const metadata = {
 };
 
 export default function OurStrengthPage() {
-  return <StaticDesignPage fileName="struktur.html" />;
+  redirect("/management/struktur");
 }
