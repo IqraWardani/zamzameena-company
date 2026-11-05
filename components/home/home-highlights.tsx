@@ -5,8 +5,8 @@ export function HomeHighlights() {
     <section className="home-design-highlights" aria-label="Business ecosystem highlights">
       {homePageContent.highlights.map((highlight) => (
         <article className="home-design-highlight" key={highlight.title}>
-          <p>{highlight.description}</p>
           <h2>{highlight.title}</h2>
+          <p>{highlight.description}</p>
         </article>
       ))}
     </section>

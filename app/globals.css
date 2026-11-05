@@ -2018,7 +2018,7 @@ body {
   position: absolute;
   z-index: -1;
   inset: 0;
-  background: linear-gradient(127deg, rgb(0 0 0 / 57%) 35%, rgb(46 46 46 / 42%) 82%);
+  background: linear-gradient(127.23deg, rgb(0 0 0 / 45%) 40.27%, rgb(102 102 102 / 45%) 73.817%);
 }
 
 .home-design-hero-content {
@@ -2093,7 +2093,7 @@ body {
 }
 
 .home-design-highlight p {
-  margin: 0 0 8px;
+  margin: 8px 0 0;
   color: #eee;
   font-size: 14px;
   font-weight: 500;
@@ -2124,7 +2124,7 @@ body {
 }
 
 .home-design-section-heading p {
-  margin: 12px 0 0;
+  margin: 16px 0 0;
   color: var(--home-body);
   font-size: 24px;
   font-weight: 400;
@@ -2133,15 +2133,19 @@ body {
 }
 
 .home-design-ecosystem {
+  display: flex;
   min-height: 850px;
-  padding: 100px 5.3% 96px;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  padding: 40px 5.3% 0;
   background: #fff;
 }
 
 .home-design-ecosystem-content {
   display: grid;
   width: min(1386px, 100%);
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 602px) minmax(0, 574px);
   align-items: center;
   gap: 48px;
   margin: 60px auto 0;
@@ -2160,7 +2164,7 @@ body {
 .home-design-architecture-grid {
   display: grid;
   height: 410px;
-  grid-template-columns: 1.075fr 1fr;
+  grid-template-columns: 1fr 1.075fr;
   gap: 25px;
 }
 
@@ -2171,6 +2175,25 @@ body {
   position: relative;
   overflow: hidden;
   background: #e8edf0;
+}
+
+.home-design-architecture-main {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.home-design-architecture-main::after {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgb(0 0 0 / 20%), rgb(102 102 102 / 20%) 46.244%);
+  content: "";
+  pointer-events: none;
+}
+
+.home-design-architecture-stack {
+  grid-column: 1;
+  grid-row: 1;
+  opacity: 0.8;
 }
 
 .home-design-architecture-main,
@@ -2199,13 +2222,13 @@ body {
 .home-design-smart-market {
   display: grid;
   min-height: 547px;
-  width: min(1390px, calc(100% - 160px));
-  grid-template-columns: minmax(0, 570px) minmax(0, 667px);
+  width: min(1386px, calc(100% - 160px));
+  grid-template-columns: minmax(0, 570px) minmax(0, 602px);
   align-items: center;
-  justify-content: space-between;
-  gap: 64px;
+  justify-content: center;
+  gap: 80px;
   margin: 0 auto;
-  padding: 72px 0 80px;
+  padding: 80px 0;
   background: #fff;
 }
 
@@ -2235,7 +2258,7 @@ body {
 }
 
 .home-design-eyebrow {
-  margin: 0 0 12px;
+  margin: 0 0 16px;
   color: var(--home-body);
   font-size: 24px;
   font-weight: 400;
@@ -2244,7 +2267,7 @@ body {
 }
 
 .home-design-smart-market-copy h2 {
-  margin: 0 0 22px;
+  margin: 0 0 24px;
   color: var(--home-ink);
   font-size: 48px;
   font-weight: 700;
@@ -2252,7 +2275,7 @@ body {
 }
 
 .home-design-smart-market-copy .home-design-body-copy {
-  margin-bottom: 30px;
+  margin-bottom: 48px;
 }
 
 .home-design-button-dark {
@@ -2266,11 +2289,12 @@ body {
 }
 
 .home-design-founders {
+  position: relative;
   display: flex;
-  min-height: 1182px;
+  min-height: 750px;
   align-items: center;
   flex-direction: column;
-  padding: 100px 24px 76px;
+  padding: 24px 24px 24px;
   background: #fff;
 }
 
@@ -2281,23 +2305,15 @@ body {
 .home-design-founders-grid {
   display: grid;
   width: min(1062px, 100%);
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 24px;
+  opacity: 0.9;
 }
 
 .home-design-founder-card {
-  grid-column: span 2;
   aspect-ratio: 338 / 357;
   border-radius: 12px;
   background: #e6e8e8;
-}
-
-.home-design-founder-card:nth-child(4) {
-  grid-column: 2 / span 2;
-}
-
-.home-design-founder-card:nth-child(5) {
-  grid-column: 4 / span 2;
 }
 
 .home-design-founder-card img {
@@ -2310,7 +2326,9 @@ body {
 }
 
 .home-design-founders > .home-design-button {
-  margin-top: 32px;
+  position: static;
+  align-self: center;
+  margin-top: 26px;
 }
 
 .home-design-cta {
@@ -2353,6 +2371,12 @@ body {
   font-size: 32px;
   font-weight: 700;
   line-height: 1.1;
+}
+
+.home-design-cta-content .home-design-button {
+  min-height: 0;
+  padding: 12px 24px;
+  font-size: 16px;
 }
 
 .home-design-footer {
@@ -2777,9 +2801,7 @@ body {
   min-height: 570px;
   align-items: center;
   overflow: hidden;
-  background:
-    radial-gradient(ellipse at 82% 35%, rgb(213 173 120 / 15%), transparent 34%),
-    linear-gradient(125deg, #101820 0%, #17232b 70%, #1c2a31 100%);
+  background: radial-gradient(ellipse at 82% 35%, rgb(213 173 120 / 15%), transparent 34%), linear-gradient(125deg, #101820 0%, #17232b 70%, #1c2a31 100%);
 }
 
 .zas-content-page-hero::after {
@@ -2900,7 +2922,6 @@ body {
   .zas-placeholder-panel {
     padding: 22px;
   }
-
 }
 
 .zas-technology-section,
@@ -2917,13 +2938,7 @@ body {
   align-items: center;
   overflow: hidden;
   background-color: #292725;
-  background-image:
-    linear-gradient(
-      127deg,
-      rgb(0 0 0 / 45%) 40.27%,
-      rgb(102 102 102 / 45%) 73.817%
-    ),
-    url("/images/figma/corporate-goals-hero.png");
+  background-image: linear-gradient(127deg, rgb(0 0 0 / 45%) 40.27%, rgb(102 102 102 / 45%) 73.817%), url("/images/figma/corporate-goals-hero.png");
   background-position: center;
   background-size: cover;
   background-repeat: no-repeat;
@@ -3385,7 +3400,7 @@ body {
     min-height: 112px;
     align-items: center;
     justify-content: center;
-    flex-direction: column-reverse;
+    flex-direction: column;
     gap: 6px;
     padding: 12px 8px;
   }
@@ -3476,7 +3491,7 @@ body {
   }
 
   .home-design-smart-market-copy .home-design-body-copy {
-    margin-bottom: 23px;
+    margin-bottom: 30px;
   }
 
   .home-design-founders {
@@ -3496,11 +3511,6 @@ body {
   .home-design-founder-card {
     grid-column: auto;
     border-radius: 8px;
-  }
-
-  .home-design-founder-card:nth-child(4),
-  .home-design-founder-card:nth-child(5) {
-    grid-column: auto;
   }
 
   .home-design-founder-card:first-child {
@@ -3647,12 +3657,14 @@ body {
   line-height: 1.1;
 }
 
-.about-design-hero-subtitle {
-  margin: 20px 0 14px !important;
-  color: #bdbdbd !important;
-  font-size: clamp(20px, 2vw, 28px) !important;
-  font-weight: 600 !important;
-  line-height: 1.4 !important;
+.about-design-hero-eyebrow {
+  margin: 0 0 14px;
+  color: #d0d0d0;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  line-height: 1.4;
+  text-transform: uppercase;
 }
 
 .about-design-hero-content > p:last-child {
@@ -3731,8 +3743,7 @@ body {
 
 .about-design-identity-image img,
 .about-design-direction-image img,
-.about-design-principle-image img,
-.about-design .zas-founder-profile-image img {
+.about-design-principle-image img {
   object-fit: cover;
 }
 
@@ -3821,108 +3832,6 @@ body {
   line-height: 1.55;
 }
 
-.about-design-founders {
-  min-height: 3102px;
-  padding: 100px 24px 132px;
-  background: #fff;
-}
-
-.about-design-founders-header {
-  margin-bottom: 60px;
-}
-
-.about-design-founders-list {
-  display: grid;
-  width: min(1062px, 100%);
-  gap: 150px;
-  margin: 0 auto;
-}
-
-.about-design .zas-founder-profile {
-  grid-template-columns: minmax(0, 338px) minmax(0, 1fr);
-  align-items: center;
-  column-gap: 51px;
-  row-gap: 0;
-}
-
-.about-design .zas-founder-profile.is-reversed {
-  grid-template-columns: minmax(0, 1fr) minmax(0, 338px);
-  column-gap: 51px;
-}
-
-.about-design .zas-founder-profile.is-reversed .zas-founder-profile-image {
-  grid-column: 2;
-  grid-row: 1;
-}
-
-.about-design .zas-founder-profile.is-reversed .zas-founder-profile-copy {
-  grid-column: 1;
-  grid-row: 1;
-}
-
-.about-design .zas-founder-profile-image {
-  min-height: 0;
-  aspect-ratio: 338 / 500;
-  border-radius: 12px;
-  background: #e8edf0;
-}
-
-.about-design .zas-founder-profile-image::after {
-  display: none;
-}
-
-.about-design .zas-founder-profile-image > span {
-  display: none;
-}
-
-.about-design .zas-founder-profile-copy {
-  display: flex;
-  min-height: 500px;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 0;
-}
-
-.about-design .zas-founder-profile:not(.is-reversed) .zas-founder-profile-copy {
-  text-align: right;
-}
-
-.about-design .zas-founder-bio {
-  margin: 0;
-  color: var(--about-ink);
-  font-size: 18px;
-  font-weight: 400;
-  letter-spacing: 0.2px;
-  line-height: 1.55;
-  text-align: justify;
-}
-
-.about-design .zas-founder-profile:not(.is-reversed) .zas-founder-bio {
-  width: min(100%, 470px);
-  margin-left: auto;
-  text-align: right;
-}
-
-.about-design .zas-founder-signature h3 {
-  margin: 0;
-  color: var(--about-ink);
-  font-size: clamp(20px, 2.1vw, 30px);
-  font-weight: 700;
-  letter-spacing: 0;
-  line-height: 1.25;
-  text-transform: uppercase;
-}
-
-.about-design .zas-founder-signature .zas-eyebrow {
-  margin: 4px 0 0;
-  color: #757575;
-  font-size: clamp(16px, 1.8vw, 24px);
-  font-weight: 400;
-  letter-spacing: 0;
-  line-height: 1.4;
-  text-transform: uppercase;
-}
-
 @media (max-width: 900px) {
   .about-design-identity {
     min-height: 0;
@@ -3949,21 +3858,6 @@ body {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 36px;
   }
-
-  .about-design .zas-founder-profile,
-  .about-design .zas-founder-profile.is-reversed {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    column-gap: 32px;
-  }
-
-  .about-design .zas-founder-profile-copy {
-    min-height: 0;
-    gap: 32px;
-  }
-
-  .about-design .zas-founder-bio {
-    font-size: 15px;
-  }
 }
 
 @media (max-width: 680px) {
@@ -3989,9 +3883,8 @@ body {
     font-size: clamp(48px, 13vw, 68px);
   }
 
-  .about-design-hero-subtitle {
-    margin-top: 16px !important;
-    font-size: 20px !important;
+  .about-design-hero-eyebrow {
+    font-size: 12px;
   }
 
   .about-design-hero-content > p:last-child {
@@ -4066,46 +3959,6 @@ body {
   .about-design-principle > p {
     font-size: 14px;
   }
-
-  .about-design-founders {
-    min-height: 0;
-    padding: 72px 22px 84px;
-  }
-
-  .about-design-founders-header {
-    margin-bottom: 36px;
-  }
-
-  .about-design .zas-founder-profile,
-  .about-design .zas-founder-profile.is-reversed {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 22px;
-  }
-
-  .about-design .zas-founder-profile-image {
-    width: min(100%, 420px);
-    min-height: 0;
-    aspect-ratio: 0.88;
-  }
-
-  .about-design .zas-founder-profile-copy {
-    min-height: 0;
-    gap: 24px;
-  }
-
-  .about-design .zas-founder-bio {
-    font-size: 14px;
-  }
-
-  .about-design .zas-founder-signature h3 {
-    font-size: 22px;
-  }
-
-  .about-design .zas-founder-signature .zas-eyebrow {
-    font-size: 16px;
-  }
 }
 
 .business-design {
@@ -4141,11 +3994,7 @@ body {
   position: absolute;
   z-index: -1;
   inset: 0;
-  background: linear-gradient(
-    127deg,
-    rgb(0 0 0 / 45%) 40%,
-    rgb(102 102 102 / 45%) 74%
-  );
+  background: linear-gradient(127deg, rgb(0 0 0 / 45%) 40%, rgb(102 102 102 / 45%) 74%);
 }
 
 .business-hero-content {
@@ -4732,249 +4581,243 @@ body {
   }
 }
 
-  .vision-mission-page {
-    background: #fff;
-    color: #424242;
-    font-family: "Rubik", Arial, sans-serif;
-  }
+.vision-mission-page {
+  background: #fff;
+  color: #424242;
+  font-family: "Rubik", Arial, sans-serif;
+}
 
+.vision-mission-hero {
+  position: relative;
+  display: flex;
+  min-height: 850px;
+  align-items: center;
+  isolation: isolate;
+  overflow: hidden;
+  background: #252525;
+}
+
+.vision-mission-hero > img {
+  z-index: -2;
+  object-fit: cover;
+  object-position: center;
+}
+
+.vision-mission-hero-shade {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: linear-gradient(127deg, rgb(0 0 0 / 45%) 40.27%, rgb(102 102 102 / 45%) 73.82%);
+}
+
+.vision-mission-hero-content {
+  width: min(1430px, calc(100% - 120px));
+  margin: 0 auto;
+  transform: translateY(75px);
+}
+
+.vision-mission-hero-content h1 {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  color: #e0e0e0;
+  font-size: clamp(52px, 5.8vw, 90px);
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1.1;
+}
+
+.vision-mission-hero-content > p {
+  margin: 24px 0 0;
+  color: #bdbdbd;
+  font-size: clamp(18px, 1.81vw, 28px);
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  line-height: 1.4;
+}
+
+.vision-mission-intro {
+  display: flex;
+  min-height: 441px;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  gap: 32px;
+  padding: 72px 5.3%;
+  background: #fff;
+}
+
+.vision-mission-intro blockquote {
+  width: min(1260px, 100%);
+  margin: 0;
+}
+
+.vision-mission-intro blockquote p {
+  margin: 0;
+  color: #9e9e9e;
+  font-size: clamp(18px, 1.94vw, 30px);
+  font-weight: 400;
+  letter-spacing: 0.2px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.vision-mission-intro-divider {
+  width: min(712px, 100%);
+  height: 2px;
+  background: url("/images/figma/vision-mission-divider.svg") center / 100% 100% no-repeat;
+}
+
+.vision-mission-statements {
+  padding: 80px 5.16%;
+  background: #1a1a1a;
+  color: #9e9e9e;
+}
+
+.vision-mission-statements-inner {
+  display: flex;
+  width: min(1246px, 100%);
+  flex-direction: column;
+  gap: 27px;
+  margin: 0 auto;
+}
+
+.vision-mission-row {
+  display: grid;
+  grid-template-columns: 181px minmax(0, 765px);
+  column-gap: clamp(32px, 19.35vw, 300px);
+  align-items: start;
+}
+
+.vision-mission-row:first-child {
+  min-height: 267px;
+}
+
+.vision-mission-row h2 {
+  margin: 0;
+  color: #c4c4c4;
+  font-family: "Roboto", Arial, sans-serif;
+  font-size: 32px;
+  font-weight: 500;
+  letter-spacing: 0;
+  line-height: 1.25;
+}
+
+.vision-mission-row > p,
+.vision-mission-row li {
+  margin: 0;
+  color: #9e9e9e;
+  font-size: clamp(18px, 1.94vw, 30px);
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.6;
+  text-align: justify;
+}
+
+.vision-mission-row ul {
+  display: grid;
+  gap: 42px;
+  margin: 0;
+  padding: 10px 0;
+  list-style: none;
+}
+
+.vision-mission-row li:not(:last-child) {
+  padding-bottom: 48px;
+}
+
+.vision-mission-section-divider {
+  position: relative;
+  width: min(1211px, 100%);
+  height: 0;
+  margin: 0 auto;
+}
+
+.vision-mission-section-divider::before {
+  position: absolute;
+  inset: -1px 0 auto;
+  height: 1px;
+  background: url("/images/figma/vision-mission-section-divider.svg") center / 100% 100% no-repeat;
+  content: "";
+}
+
+@media (max-width: 760px) {
   .vision-mission-hero {
-    position: relative;
-    display: flex;
-    min-height: 850px;
-    align-items: center;
-    isolation: isolate;
-    overflow: hidden;
-    background: #252525;
-  }
-
-  .vision-mission-hero > img {
-    z-index: -2;
-    object-fit: cover;
-    object-position: center;
-  }
-
-  .vision-mission-hero-shade {
-    position: absolute;
-    z-index: -1;
-    inset: 0;
-    background: linear-gradient(
-      127deg,
-      rgb(0 0 0 / 45%) 40.27%,
-      rgb(102 102 102 / 45%) 73.82%
-    );
+    min-height: 640px;
   }
 
   .vision-mission-hero-content {
-    width: min(1430px, calc(100% - 120px));
-    margin: 0 auto;
-    transform: translateY(75px);
+    width: calc(100% - 44px);
+    transform: none;
   }
 
   .vision-mission-hero-content h1 {
-    display: flex;
-    flex-direction: column;
-    margin: 0;
-    color: #e0e0e0;
-    font-size: clamp(52px, 5.8vw, 90px);
-    font-weight: 700;
-    letter-spacing: 0;
-    line-height: 1.1;
+    font-size: clamp(48px, 10.5vw, 76px);
   }
 
   .vision-mission-hero-content > p {
-    margin: 24px 0 0;
-    color: #bdbdbd;
-    font-size: clamp(18px, 1.81vw, 28px);
-    font-weight: 500;
-    letter-spacing: 0.2px;
-    line-height: 1.4;
+    max-width: 440px;
+    font-size: clamp(18px, 3.4vw, 24px);
   }
 
   .vision-mission-intro {
-    display: flex;
-    min-height: 441px;
-    align-items: center;
-    flex-direction: column;
-    justify-content: center;
-    gap: 32px;
-    padding: 72px 5.3%;
-    background: #fff;
-  }
-
-  .vision-mission-intro blockquote {
-    width: min(1260px, 100%);
-    margin: 0;
+    min-height: 0;
+    gap: 28px;
+    padding: 72px 22px 60px;
   }
 
   .vision-mission-intro blockquote p {
-    margin: 0;
-    color: #9e9e9e;
-    font-size: clamp(18px, 1.94vw, 30px);
-    font-weight: 400;
-    letter-spacing: 0.2px;
-    line-height: 1.6;
-    text-align: center;
-  }
-
-  .vision-mission-intro-divider {
-    width: min(712px, 100%);
-    height: 2px;
-    background: url("/images/figma/vision-mission-divider.svg") center / 100% 100%
-      no-repeat;
+    font-size: clamp(17px, 2.8vw, 21px);
+    line-height: 1.65;
   }
 
   .vision-mission-statements {
-    padding: 80px 5.16%;
-    background: #1a1a1a;
-    color: #9e9e9e;
+    padding: 64px 22px 72px;
   }
 
   .vision-mission-statements-inner {
-    display: flex;
-    width: min(1246px, 100%);
-    flex-direction: column;
-    gap: 27px;
-    margin: 0 auto;
+    gap: 0;
   }
 
   .vision-mission-row {
-    display: grid;
-    grid-template-columns: 181px minmax(0, 765px);
-    column-gap: clamp(32px, 19.35vw, 300px);
-    align-items: start;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
   }
 
   .vision-mission-row:first-child {
-    min-height: 267px;
+    min-height: 0;
   }
 
   .vision-mission-row h2 {
-    margin: 0;
-    color: #c4c4c4;
-    font-family: "Roboto", Arial, sans-serif;
-    font-size: 32px;
-    font-weight: 500;
-    letter-spacing: 0;
-    line-height: 1.25;
+    font-size: 24px;
   }
 
   .vision-mission-row > p,
   .vision-mission-row li {
-    margin: 0;
-    color: #9e9e9e;
-    font-size: clamp(18px, 1.94vw, 30px);
-    font-weight: 400;
-    letter-spacing: 0;
-    line-height: 1.6;
-    text-align: justify;
+    font-size: 17px;
+    line-height: 1.7;
   }
 
   .vision-mission-row ul {
-    display: grid;
-    gap: 42px;
-    margin: 0;
-    padding: 10px 0;
-    list-style: none;
+    gap: 24px;
+    padding: 0;
   }
 
   .vision-mission-row li:not(:last-child) {
-    padding-bottom: 48px;
+    padding-bottom: 0;
   }
 
   .vision-mission-section-divider {
-    position: relative;
-    width: min(1211px, 100%);
-    height: 0;
-    margin: 0 auto;
+    margin: 30px 0;
+  }
+}
+
+@media (max-width: 420px) {
+  .vision-mission-hero {
+    min-height: 560px;
   }
 
-  .vision-mission-section-divider::before {
-    position: absolute;
-    inset: -1px 0 auto;
-    height: 1px;
-    background: url("/images/figma/vision-mission-section-divider.svg") center /
-      100% 100% no-repeat;
-    content: "";
+  .vision-mission-hero-content h1 {
+    font-size: clamp(44px, 11vw, 52px);
   }
-
-  @media (max-width: 760px) {
-    .vision-mission-hero {
-      min-height: 640px;
-    }
-
-    .vision-mission-hero-content {
-      width: calc(100% - 44px);
-      transform: none;
-    }
-
-    .vision-mission-hero-content h1 {
-      font-size: clamp(48px, 10.5vw, 76px);
-    }
-
-    .vision-mission-hero-content > p {
-      max-width: 440px;
-      font-size: clamp(18px, 3.4vw, 24px);
-    }
-
-    .vision-mission-intro {
-      min-height: 0;
-      gap: 28px;
-      padding: 72px 22px 60px;
-    }
-
-    .vision-mission-intro blockquote p {
-      font-size: clamp(17px, 2.8vw, 21px);
-      line-height: 1.65;
-    }
-
-    .vision-mission-statements {
-      padding: 64px 22px 72px;
-    }
-
-    .vision-mission-statements-inner {
-      gap: 0;
-    }
-
-    .vision-mission-row {
-      grid-template-columns: minmax(0, 1fr);
-      gap: 16px;
-    }
-
-    .vision-mission-row:first-child {
-      min-height: 0;
-    }
-
-    .vision-mission-row h2 {
-      font-size: 24px;
-    }
-
-    .vision-mission-row > p,
-    .vision-mission-row li {
-      font-size: 17px;
-      line-height: 1.7;
-    }
-
-    .vision-mission-row ul {
-      gap: 24px;
-      padding: 0;
-    }
-
-    .vision-mission-row li:not(:last-child) {
-      padding-bottom: 0;
-    }
-
-    .vision-mission-section-divider {
-      margin: 30px 0;
-    }
-  }
-
-  @media (max-width: 420px) {
-    .vision-mission-hero {
-      min-height: 560px;
-    }
-
-    .vision-mission-hero-content h1 {
-      font-size: clamp(44px, 11vw, 52px);
-    }
-  }
+}

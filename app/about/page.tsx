@@ -4,11 +4,11 @@ import { redirect } from "next/navigation";
 export const metadata: Metadata = {
   title: "About Zamzameena Ainsa Synergy",
   description:
-    "Learn how Zamzameena Ainsa Synergy connects products, businesses, markets, and technology to create sustainable growth.",
+    "Learn how Zamzameena Ainsa Synergy connects products, businesses, markets, and technology.",
   openGraph: {
     title: "About Zamzameena Ainsa Synergy",
     description:
-      "Discover the principles, direction, and founders behind the Zamzameena business ecosystem.",
+      "Discover the principles and direction behind the Zamzameena business ecosystem.",
     type: "website",
   },
 };

@@ -1,7 +1,5 @@
 import Image from "next/image";
-import { Breadcrumbs } from "@/components/breadcrumbs";
 import { CtaBanner } from "@/components/cta-banner";
-import { FounderCard } from "@/components/founder-card";
 import { SiteSectionHeading } from "@/components/site-section-heading";
 import { aboutPageContent } from "@/data/about-page";
 
@@ -18,15 +16,8 @@ export function AboutPageContent() {
         />
         <div className="about-design-hero-shade" aria-hidden="true" />
         <div className="about-design-hero-content">
-          <Breadcrumbs
-            items={[
-              { label: "Home", href: "/" },
-              { label: "About", href: "/about/company-profile" },
-              { label: "Company Profile" },
-            ]}
-          />
+          <p className="about-design-hero-eyebrow">{aboutPageContent.hero.eyebrow}</p>
           <h1 id="about-design-title">{aboutPageContent.hero.title}</h1>
-          <p className="about-design-hero-subtitle">{aboutPageContent.hero.subtitle}</p>
           <p>{aboutPageContent.hero.description}</p>
         </div>
       </section>
@@ -94,27 +85,6 @@ export function AboutPageContent() {
               <h3>{principle.title}</h3>
               <p>{principle.description}</p>
             </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="about-design-founders" id="founders" aria-labelledby="about-founders-title">
-        <header className="about-design-founders-header">
-          <SiteSectionHeading
-            title={aboutPageContent.founders.title}
-            description={aboutPageContent.founders.subtitle}
-            align="center"
-            titleId="about-founders-title"
-          />
-        </header>
-        <div className="about-design-founders-list">
-          {aboutPageContent.founders.people.map((founder, index) => (
-            <FounderCard
-              founder={founder}
-              index={index}
-              key={founder.name}
-              variant="profile"
-            />
           ))}
         </div>
       </section>

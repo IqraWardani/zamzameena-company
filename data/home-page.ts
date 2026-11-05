@@ -87,16 +87,6 @@ export const homePageContent = {
         image: "/images/figma/founder-03.webp",
         imageAlt: "Potret pendiri Zamzameena ketiga",
       },
-      {
-        name: "Founder 4",
-        image: "/images/figma/founder-04.webp",
-        imageAlt: "Potret pendiri Zamzameena keempat",
-      },
-      {
-        name: "Founder 5",
-        image: "/images/figma/founder-05.webp",
-        imageAlt: "Potret pendiri Zamzameena kelima",
-      },
     ],
   },
   cta: {
