@@ -19,7 +19,7 @@ export const siteNavigation: SiteNavigationItem[] = [
     label: "Management",
     children: [
       { label: "Struktur", href: "/management/struktur" },
-      { label: "Pendiri", href: "/management/pendiri" },
+      { label: "Founder", href: "/management/founder" },
       { label: "Direksi", href: "/management/direksi" },
       { label: "SDM", href: "/management/sdm" },
     ],

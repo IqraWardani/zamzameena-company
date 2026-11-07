@@ -40,8 +40,8 @@ export const managementPages: Record<string, StandardPageContent> = {
       { label: "Struktur" },
     ],
   },
-  pendiri: {
-    title: "Pendiri",
+  founder: {
+    title: "Founder",
     eyebrow: "Management",
     description: "Founder information will be presented here using approved company biographies.",
     sectionTitle: "Founder profiles",
@@ -50,7 +50,7 @@ export const managementPages: Record<string, StandardPageContent> = {
     breadcrumbs: [
       homeBreadcrumb,
       { label: "Management", href: "/management/struktur" },
-      { label: "Pendiri" },
+      { label: "Founder" },
     ],
   },
   direksi: {
@@ -77,35 +77,6 @@ export const managementPages: Record<string, StandardPageContent> = {
       homeBreadcrumb,
       { label: "Management", href: "/management/struktur" },
       { label: "SDM" },
-    ],
-  },
-};
-
-export const mediaPages: Record<string, StandardPageContent> = {
-  "zamzameena-live": {
-    title: "Zamzameena Live",
-    eyebrow: "Media",
-    description: "Official Zamzameena Live programming and channel information will appear here when available.",
-    sectionTitle: "Zamzameena Live",
-    sectionDescription: "This space is prepared for approved video, broadcast, or event content.",
-    placeholder: "No official Zamzameena Live content or channel links have been provided yet.",
-    breadcrumbs: [
-      homeBreadcrumb,
-      { label: "Media", href: "/media/zamzameena-live" },
-      { label: "Zamzameena Live" },
-    ],
-  },
-  "social-media": {
-    title: "Social Media",
-    eyebrow: "Media",
-    description: "Verified social media channels and updates will be listed here when available.",
-    sectionTitle: "Official social channels",
-    sectionDescription: "Only confirmed company accounts and approved updates should be added here.",
-    placeholder: "Official social media profile links have not yet been provided.",
-    breadcrumbs: [
-      homeBreadcrumb,
-      { label: "Media", href: "/media/zamzameena-live" },
-      { label: "Social Media" },
     ],
   },
 };
