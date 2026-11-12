@@ -43,7 +43,8 @@ export const managementPages: Record<string, StandardPageContent> = {
   founder: {
     title: "Founder",
     eyebrow: "Management",
-    description: "Founder information will be presented here using approved company biographies.",
+    description:
+      "Meet the founders whose vision, shared purpose, and leadership shape the future of Zamzameena Ainsa Synergy.",
     sectionTitle: "Founder profiles",
     sectionDescription: "This space is reserved for verified founder profiles and approved statements.",
     placeholder: "Founder details for this page have not yet been provided.",

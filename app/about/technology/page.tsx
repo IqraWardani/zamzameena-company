@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { TechnologyPageContent } from "@/components/technology-page-content";
+import { ComingSoonPage } from "@/components/coming-soon-page";
 
 export const metadata: Metadata = {
   title: "Technology",
@@ -8,5 +8,12 @@ export const metadata: Metadata = {
 };
 
 export default function TechnologyPage() {
-  return <TechnologyPageContent />;
+  return (
+    <ComingSoonPage
+      heroTitle="TECHNOLOGY"
+      heroTagline="Product knowledge and ecosystem understanding for Zamzameena's business architecture and commercial positioning."
+      heroImage="/images/figma/about-hero.webp"
+      description="We are preparing a dedicated space for Zamzameena Ainsa Synergy's technology, products, and ecosystem. Leave your email and we will let you know when it opens."
+    />
+  );
 }

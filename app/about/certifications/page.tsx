@@ -1,12 +1,19 @@
 import type { Metadata } from "next";
-import { StandardContentPage } from "@/components/standard-content-page";
-import { certificationsPage } from "@/data/content-pages";
+import { ComingSoonPage } from "@/components/coming-soon-page";
 
 export const metadata: Metadata = {
-  title: certificationsPage.title,
-  description: certificationsPage.description,
+  title: "Certifications",
+  description:
+    "Verified company certifications and supporting information will be presented in this section.",
 };
 
 export default function CertificationsPage() {
-  return <StandardContentPage page={certificationsPage} />;
+  return (
+    <ComingSoonPage
+      heroTitle="CERTIFICATIONS"
+      heroTagline="Demonstrating our commitment to quality, trust, and recognized standards."
+      heroImage="/images/figma/about-hero.webp"
+      description="We are preparing a dedicated space for Zamzameena Ainsa Synergy's verified certifications and supporting information. Leave your email and we will let you know when it opens."
+    />
+  );
 }

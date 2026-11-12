@@ -22,7 +22,7 @@ export function FounderCard({
   if (variant === "profile") {
     return (
       <article
-        className={`zas-founder-profile${index % 2 === 1 ? " is-reversed" : ""}`}
+        className={`zas-founder-profile zas-founder-profile--founder-design${index % 2 === 1 ? " is-reversed" : ""}`}
         data-reveal
       >
         <div className="zas-founder-profile-image">
