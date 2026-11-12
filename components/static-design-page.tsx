@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 
 type StaticDesignPageProps = {
-  fileName: "struktur.html" | "hubungi.html";
+  fileName: "struktur.html";
   useSiteChrome?: boolean;
 };
 
@@ -12,7 +12,6 @@ const routeRewrites = [
   [/href="struktur\.html(?=[#"])/g, 'href="/management/struktur'],
   [/href="hubungi\.html(?=[#"])/g, 'href="/contact'],
   [/(src|href)="assets\//g, '$1="/assets/'],
-  [/src="photos\/hubungi\.jpg(?=["])/g, 'src="/images/business-meeting-placeholder.svg'],
   [/src="photos\//g, 'src="/photos/'],
 ] as const;
 
@@ -24,8 +23,6 @@ export function StaticDesignPage({
     switch (fileName) {
       case "struktur.html":
         return readFileSync(join(process.cwd(), "struktur.html"), "utf8");
-      case "hubungi.html":
-        return readFileSync(join(process.cwd(), "hubungi.html"), "utf8");
     }
   })();
   const body = source.match(/<body[^>]*>([\s\S]*?)<\/body>/i)?.[1];
