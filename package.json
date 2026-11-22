@@ -6,21 +6,57 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test:auth": "tsx --test tests/admin-access.test.ts tests/admin-events.test.ts",
+    "test:registration": "tsx --test tests/public-registration.test.ts",
+    "test:invoices": "tsx --test tests/invoices.test.ts",
+    "test:whatsapp": "tsx --test tests/whatsapp.test.ts",
+    "test:contact": "tsx --test tests/contact-security.test.ts",
+    "test:events": "tsx --test tests/public-events.test.ts",
+    "test:payments": "tsx --test tests/payments.test.ts",
+    "test:participant-management": "tsx --test tests/participant-status.test.ts",
+    "test:tickets": "tsx --test tests/tickets-invitations.test.ts",
+    "test:check-in": "tsx --test tests/check-in.test.ts",
+    "admin:provision": "node --env-file=.env.local --import=tsx scripts/provision-admin.ts",
+    "admin:provision-marketing-director": "node --env-file=.env.local --import=tsx scripts/provision-marketing-director.ts",
+    "admin:enable-payment-review": "node --env-file=.env.local --import=tsx scripts/enable-payment-review.ts",
+    "admin:enable-invitation-collection": "node --env-file=.env.local --import=tsx scripts/enable-invitation-collection.ts",
+    "admin:enable-check-in": "node --env-file=.env.local --import=tsx scripts/enable-check-in.ts",
+    "admin:enable-contact-management": "node --env-file=.env.local --import=tsx scripts/enable-contact-management.ts",
+    "prisma:generate": "node --env-file=.env.local ./node_modules/prisma/build/index.js generate --schema=prisma/schema.prisma",
+    "prisma:format": "node --env-file=.env.local ./node_modules/prisma/build/index.js format --schema=prisma/schema.prisma",
+    "prisma:migrate:deploy": "node --env-file=.env.local ./node_modules/prisma/build/index.js migrate deploy --schema=prisma/schema.prisma"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1169.0",
+    "@aws-sdk/s3-request-presigner": "^3.1169.0",
+    "@prisma/adapter-pg": "^7.10.1",
+    "@prisma/client": "^7.10.1",
+    "@supabase/supabase-js": "^2.119.0",
+    "exceljs": "^4.4.0",
+    "jose": "^6.2.17",
     "next": "16.3.8",
+    "pdfkit": "^0.20.2",
     "react": "19.2.8",
     "react-dom": "19.2.8"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
+    "@types/pdfkit": "^0.17.7",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.3.8",
+    "prisma": "^7.10.1",
     "tailwindcss": "^4",
+    "tsx": "^4.23.15",
     "typescript": "^5"
+  },
+  "overrides": {
+    "exceljs": {
+      "uuid": "^11.1.1"
+    }
   }
 }
