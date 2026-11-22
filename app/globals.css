@@ -735,6 +735,16 @@ body:has(.zas-admin-route) {
   font-size: 13px;
 }
 
+.zas-password-recovery-message {
+  margin: 8px 0;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.zas-password-recovery-message.is-success {
+  color: #b7d7c3;
+}
+
 .zas-admin-logout {
   background: transparent;
   color: var(--zas-ink);

@@ -15,14 +15,12 @@ import {
   recordLoginFailure,
   shouldAuditRateLimit,
 } from "@/lib/admin/login-rate-limit";
-import { verifyAdminPassword } from "@/lib/security/password-hash";
+import { createSupabaseServerClient } from "@/lib/supabase/server-client";
 
 export type LoginFormState = {
   error?: string;
 };
 
-const DUMMY_PASSWORD_HASH =
-  `scrypt$32768$8$1$${"A".repeat(22)}$${"A".repeat(86)}`;
 const GENERIC_LOGIN_ERROR = "Sign-in failed. Check your credentials or try again later.";
 
 function clientIpFromTrustedHeader(value: string | null): string | undefined {
@@ -64,16 +62,49 @@ export async function login(
     return { error: GENERIC_LOGIN_ERROR };
   }
 
-  const adminUser = await prisma.adminUser.findUnique({
-    where: { email },
-    select: { id: true, passwordHash: true, status: true },
-  });
-  const passwordMatches = await verifyAdminPassword(
-    password,
-    adminUser?.passwordHash ?? DUMMY_PASSWORD_HASH,
-  );
+  let authenticatedEmail: string;
+  try {
+    const { data, error } = await createSupabaseServerClient().auth.signInWithPassword({
+      email,
+      password,
+    });
+    if (error || !data.user?.email) {
+      if (!error || (error.status ?? 0) < 500) {
+        recordLoginFailure(email, clientIp);
+      } else {
+        console.error("Supabase Auth could not process an admin sign-in request.");
+        return { error: "Sign-in is temporarily unavailable. Please try again later." };
+      }
+      await logAdminAudit({
+        action: "login_failed",
+        entityType: "admin_user",
+        metadata: { reason: "invalid_credentials" },
+      });
+      return { error: GENERIC_LOGIN_ERROR };
+    }
+    authenticatedEmail = data.user.email.trim().toLowerCase();
+  } catch (error) {
+    console.error(
+      "Supabase Auth admin sign-in failed.",
+      error instanceof Error ? error.message : "Unknown error",
+    );
+    return { error: "Sign-in is temporarily unavailable. Please try again later." };
+  }
 
-  if (!adminUser || adminUser.status !== "active" || !passwordMatches) {
+  const adminUser = await prisma.adminUser.findUnique({
+    where: { email: authenticatedEmail },
+    select: {
+      id: true,
+      status: true,
+      userRoles: { select: { role: { select: { code: true } } } },
+    },
+  });
+
+  if (
+    !adminUser ||
+    adminUser.status !== "active" ||
+    adminUser.userRoles.length === 0
+  ) {
     recordLoginFailure(email, clientIp);
     await logAdminAudit({
       action: "login_failed",
@@ -138,4 +169,15 @@ export async function logout(): Promise<never> {
   });
 
   redirect("/admin/login");
+}
+
+export async function clearAdminSessionAfterPasswordReset(): Promise<void> {
+  const cookieStore = await cookies();
+  cookieStore.set(adminSessionCookie.name, "", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+    path: adminSessionCookie.path,
+    maxAge: 0,
+  });
 }

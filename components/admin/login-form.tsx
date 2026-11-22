@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { login, type LoginFormState } from "@/app/admin/actions";
 import { usePreservedActionState } from "@/components/admin/use-preserved-action-state";
 
@@ -40,6 +41,9 @@ export function AdminLoginForm() {
       <button disabled={pending} type="submit">
         {pending ? "Signing in..." : "Sign in"}
       </button>
+      <Link className="zas-admin-text-link" href="/forgot-password">
+        Forgot Password?
+      </Link>
     </form>
   );
 }
