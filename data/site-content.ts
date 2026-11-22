@@ -33,6 +33,7 @@ export const siteNavigation: SiteNavigationItem[] = [
   },
   { label: "Marketing", href: "/marketing" },
   { label: "Career", href: "/career" },
+  { label: "Event", href: "/event" },
   { label: "Contact", href: "/contact" },
 ];
 

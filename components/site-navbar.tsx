@@ -16,6 +16,17 @@ function menuId(label: string) {
 
 export function SiteNavbar() {
   const pathname = usePathname();
+  const synergySummitPath = "/event/synergy-preneur-summit-2027";
+  const synergyReferralPath = `${synergySummitPath}/link-penjualan`;
+  const synergyEventChildren = [
+    { label: "Halaman Event", href: synergySummitPath },
+    { label: "Link Referral", href: synergyReferralPath },
+  ];
+  const isSynergySummitRoute = Boolean(
+    pathname &&
+      (pathname === synergySummitPath ||
+        pathname.startsWith(`${synergySummitPath}/`)),
+  );
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
@@ -101,12 +112,13 @@ export function SiteNavbar() {
 
         <nav className="zas-desktop-nav" aria-label="Main navigation">
           {siteNavigation.map((item) => {
-            if (!item.children) {
+            const isSynergyEventItem = isSynergySummitRoute && item.label === "Event";
+            if (!item.children && !isSynergyEventItem) {
               return (
                 <Link
                   key={item.label}
                   href={item.href}
-                  aria-current={pathname === item.href ? "page" : undefined}
+                  aria-current={isActivePath(pathname, item.href) ? "page" : undefined}
                 >
                   {item.label}
                 </Link>
@@ -115,15 +127,19 @@ export function SiteNavbar() {
 
             const expanded = openDropdown === item.label;
             const id = menuId(item.label);
-            const isCurrent = item.children.some((child) =>
-              isActivePath(pathname, child.href),
-            );
+            const children = isSynergyEventItem
+              ? synergyEventChildren
+              : item.children ?? [];
+            const isCurrent = isSynergyEventItem
+              ? pathname !== synergyReferralPath
+              : children.some((child) => isActivePath(pathname, child.href));
 
             return (
               <div className="zas-nav-dropdown" key={item.label}>
                 <button
                   aria-controls={id}
                   aria-expanded={expanded}
+                  aria-current={isCurrent ? "page" : undefined}
                   className={`zas-nav-dropdown-trigger${isCurrent ? " is-current" : ""}`}
                   onClick={() => toggleDropdown(item.label, id)}
                   ref={(node) => {
@@ -135,9 +151,9 @@ export function SiteNavbar() {
                   <span aria-hidden="true">⌄</span>
                 </button>
                 <div className="zas-nav-dropdown-menu" hidden={!expanded} id={id}>
-                  {item.children.map((child) => (
+                  {children.map((child) => (
                     <Link
-                      aria-current={pathname === child.href ? "page" : undefined}
+                      aria-current={pathname === child.href.split("?")[0] ? "page" : undefined}
                       href={child.href}
                       key={child.href}
                       onClick={() => setOpenDropdown(null)}
@@ -179,12 +195,13 @@ export function SiteNavbar() {
         inert={!menuOpen}
       >
         {siteNavigation.map((item) => {
-          if (!item.children) {
+          const isSynergyEventItem = isSynergySummitRoute && item.label === "Event";
+          if (!item.children && !isSynergyEventItem) {
             return (
               <Link
                 key={item.label}
                 href={item.href}
-                aria-current={pathname === item.href ? "page" : undefined}
+                aria-current={isActivePath(pathname, item.href) ? "page" : undefined}
                 onClick={() => setMenuOpen(false)}
               >
                 {item.label}
@@ -195,15 +212,19 @@ export function SiteNavbar() {
 
           const expanded = openDropdown === item.label;
           const id = `${menuId(item.label)}-mobile`;
-          const isCurrent = item.children.some((child) =>
-            isActivePath(pathname, child.href),
-          );
+          const children = isSynergyEventItem
+            ? synergyEventChildren
+            : item.children ?? [];
+          const isCurrent = isSynergyEventItem
+            ? pathname !== synergyReferralPath
+            : children.some((child) => isActivePath(pathname, child.href));
 
           return (
             <div className="zas-mobile-nav-group" key={item.label}>
               <button
                 aria-controls={id}
                 aria-expanded={expanded}
+                aria-current={isCurrent ? "page" : undefined}
                 className={`zas-mobile-nav-parent${isCurrent ? " is-current" : ""}`}
                 onClick={() => {
                   setOpenDropdown(expanded ? null : item.label);
@@ -214,12 +235,15 @@ export function SiteNavbar() {
                 <span aria-hidden="true">{expanded ? "−" : "+"}</span>
               </button>
               <div className="zas-mobile-submenu" hidden={!expanded} id={id}>
-                {item.children.map((child) => (
+                {children.map((child) => (
                   <Link
-                    aria-current={pathname === child.href ? "page" : undefined}
+                    aria-current={pathname === child.href.split("?")[0] ? "page" : undefined}
                     href={child.href}
                     key={child.href}
-                    onClick={() => setMenuOpen(false)}
+                    onClick={() => {
+                      setMenuOpen(false);
+                      setOpenDropdown(null);
+                    }}
                   >
                     {child.label}
                   </Link>

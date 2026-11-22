@@ -78,11 +78,6 @@ export const homePageContent = {
         imageAlt: "Potret pendiri Zamzameena pertama",
       },
       {
-        name: "Founder 2",
-        image: "/images/figma/founder-02.webp",
-        imageAlt: "Potret pendiri Zamzameena kedua",
-      },
-      {
         name: "Founder 3",
         image: "/images/figma/founder-03.webp",
         imageAlt: "Potret pendiri Zamzameena ketiga",
