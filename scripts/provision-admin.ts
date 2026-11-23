@@ -166,6 +166,9 @@ async function provisionAdmin() {
       });
 
       return user;
+    }, {
+      maxWait: 15_000,
+      timeout: 30_000,
     });
 
     console.log(`Administrator provisioned successfully (id: ${adminUser.id}).`);
