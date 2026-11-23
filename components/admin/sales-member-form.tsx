@@ -1,6 +1,13 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, type FormEvent } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type FormEvent,
+  type KeyboardEvent,
+} from "react";
 import { FormFieldLabel } from "@/components/form-field-label";
 import { usePreservedActionState } from "@/components/admin/use-preserved-action-state";
 import type { SalesMemberFormState } from "@/lib/sales/actions";
@@ -21,6 +28,21 @@ export type SalesMemberFormValues = {
 };
 
 type SalesMemberFormAction = (state: SalesMemberFormState, formData: FormData) => Promise<SalesMemberFormState>;
+type SalesPersonOption = { id: string; fullName: string; memberCode: string };
+type SalesPersonSearchStatus = "idle" | "loading" | "success" | "error";
+
+function isSalesPersonOption(person: unknown): person is SalesPersonOption {
+  return (
+    typeof person === "object" &&
+    person !== null &&
+    "id" in person &&
+    typeof person.id === "string" &&
+    "fullName" in person &&
+    typeof person.fullName === "string" &&
+    "memberCode" in person &&
+    typeof person.memberCode === "string"
+  );
+}
 
 const REFERRAL_PREFIX: Record<SalesPosition, string> = {
   director: "DIR",
@@ -50,7 +72,7 @@ export function SalesMemberForm({
   supervisors,
   formId,
   eventCode,
-  people = [],
+  eventId,
   nextSequenceByPosition,
 }: {
   action: SalesMemberFormAction;
@@ -58,17 +80,30 @@ export function SalesMemberForm({
   supervisors: Array<{ id: string; fullName: string; position: SalesPosition }>;
   formId: string;
   eventCode: string | null;
-  people?: Array<{ id: string; fullName: string; memberCode: string }>;
+  eventId: string;
   nextSequenceByPosition?: Partial<Record<SalesPosition, number>>;
 }) {
   const isEditing = Boolean(values);
   const [position, setPosition] = useState<SalesPosition>(
     values?.position ?? nextSalesPosition(supervisors),
   );
-  const [personId, setPersonId] = useState("");
+  const [selectedPerson, setSelectedPerson] = useState<SalesPersonOption | null>(null);
+  const [personSearch, setPersonSearch] = useState("");
+  const [personSearchResults, setPersonSearchResults] = useState<SalesPersonOption[]>([]);
+  const [personSearchStatus, setPersonSearchStatus] = useState<SalesPersonSearchStatus>("idle");
+  const [personSearchResultQuery, setPersonSearchResultQuery] = useState<string | null>(null);
+  const [personSearchError, setPersonSearchError] = useState("");
+  const [personSearchAttempt, setPersonSearchAttempt] = useState(0);
+  const [activePersonIndex, setActivePersonIndex] = useState(-1);
+  const normalizedPersonSearch = personSearch.trim();
   const resetAddFormState = useCallback(() => {
     setPosition(nextSalesPosition(supervisors));
-    setPersonId("");
+    setSelectedPerson(null);
+    setPersonSearch("");
+    setPersonSearchResults([]);
+    setPersonSearchStatus("idle");
+    setPersonSearchResultQuery(null);
+    setPersonSearchError("");
   }, [supervisors]);
   const {
     state,
@@ -87,8 +122,13 @@ export function SalesMemberForm({
   const submissionLocked = useRef(false);
   const fieldErrors = state.fieldErrors ?? {};
   const previewCode = values?.referralCode ?? (eventCode ? `${REFERRAL_PREFIX[position]}-${eventCode}-${String(nextSequenceByPosition?.[position] ?? 1).padStart(3, "0")}` : "Atur kode event terlebih dahulu");
-  const selectedPerson = people.find((person) => person.id === personId);
   const hasExistingPerson = isEditing || Boolean(selectedPerson);
+  const currentSearchStatus = personSearchResultQuery === normalizedPersonSearch
+    ? personSearchStatus
+    : "idle";
+  const currentSearchResults = personSearchResultQuery === normalizedPersonSearch
+    ? personSearchResults
+    : [];
   const expectedSupervisorPosition = requiredSupervisorPosition(position);
   const hasEligibleSupervisor = !expectedSupervisorPosition ||
     supervisors.some((supervisor) => supervisor.position === expectedSupervisorPosition);
@@ -100,6 +140,92 @@ export function SalesMemberForm({
   useEffect(() => {
     if (!pending) submissionLocked.current = false;
   }, [pending]);
+
+  useEffect(() => {
+    if (isEditing || selectedPerson || normalizedPersonSearch.length < 2) {
+      return;
+    }
+
+    const controller = new AbortController();
+    const timeoutId = window.setTimeout(() => {
+      setPersonSearchResultQuery(normalizedPersonSearch);
+      setPersonSearchResults([]);
+      setPersonSearchStatus("loading");
+      setPersonSearchError("");
+      setActivePersonIndex(-1);
+
+      void fetch(
+        `/api/admin/sales/people?eventId=${encodeURIComponent(eventId)}&q=${encodeURIComponent(normalizedPersonSearch)}`,
+        { cache: "no-store", signal: controller.signal },
+      )
+        .then(async (response) => {
+          if (!response.ok) {
+            if (response.status === 401) throw new Error("Sesi admin berakhir. Silakan masuk kembali.");
+            if (response.status === 403) throw new Error("Anda tidak memiliki akses mengelola penjual pada event ini.");
+            throw new Error("Pencarian anggota gagal. Silakan coba lagi.");
+          }
+
+          const payload: unknown = await response.json();
+          if (!payload || typeof payload !== "object" || !("people" in payload)) {
+            throw new Error("Respons pencarian anggota tidak valid.");
+          }
+          const people = payload.people;
+          if (!Array.isArray(people) || !people.every(isSalesPersonOption)) {
+            throw new Error("Respons pencarian anggota tidak valid.");
+          }
+
+          setPersonSearchResults(people);
+          setPersonSearchStatus("success");
+        })
+        .catch((error: unknown) => {
+          if (controller.signal.aborted) return;
+          setPersonSearchStatus("error");
+          setPersonSearchError(
+            error instanceof Error ? error.message : "Pencarian anggota gagal. Silakan coba lagi.",
+          );
+        });
+    }, 300);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+      controller.abort();
+    };
+  }, [
+    eventId,
+    isEditing,
+    normalizedPersonSearch,
+    personSearchAttempt,
+    selectedPerson,
+  ]);
+
+  function selectPerson(person: SalesPersonOption) {
+    setSelectedPerson(person);
+    setPersonSearch("");
+    setPersonSearchResults([]);
+    setPersonSearchStatus("idle");
+    setPersonSearchResultQuery(null);
+    setPersonSearchError("");
+    setActivePersonIndex(-1);
+  }
+
+  function handlePersonSearchKeyDown(event: KeyboardEvent<HTMLInputElement>) {
+    if (event.key === "ArrowDown" && currentSearchResults.length > 0) {
+      event.preventDefault();
+      setActivePersonIndex((current) => Math.min(current + 1, currentSearchResults.length - 1));
+    } else if (event.key === "ArrowUp" && currentSearchResults.length > 0) {
+      event.preventDefault();
+      setActivePersonIndex((current) => Math.max(current - 1, 0));
+    } else if (event.key === "Enter" && activePersonIndex >= 0) {
+      event.preventDefault();
+      const person = currentSearchResults[activePersonIndex];
+      if (person) selectPerson(person);
+    } else if (event.key === "Escape") {
+      setPersonSearchResults([]);
+      setPersonSearchStatus("idle");
+      setPersonSearchResultQuery(null);
+      setActivePersonIndex(-1);
+    }
+  }
 
   function handleFormSubmit(event: FormEvent<HTMLFormElement>) {
     if (pending || submissionLocked.current) {
@@ -177,22 +303,93 @@ export function SalesMemberForm({
       )}
       {!isEditing && (
         <div className="zas-sales-field zas-sales-person-picker">
-          <label htmlFor={`${formId}-personId`}>Identitas anggota</label>
-          <select
-            aria-describedby={fieldErrors.personId ? `${formId}-personId-error` : undefined}
-            aria-invalid={Boolean(fieldErrors.personId)}
-            id={`${formId}-personId`}
-            name="personId"
-            onChange={(event) => setPersonId(event.currentTarget.value)}
-            value={personId}
-          >
-            <option value="">Buat identitas baru</option>
-            {people.map((person) => (
-              <option key={person.id} value={person.id}>
-                {person.fullName} · {person.memberCode}
-              </option>
-            ))}
-          </select>
+          {selectedPerson ? (
+            <>
+              <span className="zas-sales-field-caption">Identitas anggota</span>
+              <input name="personId" type="hidden" value={selectedPerson.id} />
+            </>
+          ) : (
+            <>
+              <label htmlFor={`${formId}-person-search`}>Identitas anggota</label>
+              <input
+                aria-activedescendant={currentSearchResults[activePersonIndex] && activePersonIndex >= 0
+                  ? `${formId}-person-option-${activePersonIndex}`
+                  : undefined}
+                aria-autocomplete="list"
+                aria-controls={`${formId}-person-results`}
+                aria-describedby={fieldErrors.personId ? `${formId}-personId-error` : undefined}
+                aria-expanded={currentSearchResults.length > 0}
+                aria-invalid={Boolean(fieldErrors.personId)}
+                autoComplete="off"
+                id={`${formId}-person-search`}
+                maxLength={80}
+                onChange={(event) => setPersonSearch(event.currentTarget.value)}
+                onKeyDown={handlePersonSearchKeyDown}
+                placeholder="Cari nama atau kode anggota"
+                role="combobox"
+                value={personSearch}
+              />
+              <input name="personId" type="hidden" value="" />
+              {normalizedPersonSearch.length < 2 && (
+                <small className="zas-sales-form-note">
+                  Ketik minimal 2 karakter untuk mencari identitas yang belum terdaftar pada event ini. Kosongkan untuk membuat identitas baru.
+                </small>
+              )}
+              {currentSearchStatus === "loading" && (
+                <p aria-live="polite" role="status">Mencari anggota…</p>
+              )}
+              {currentSearchStatus === "error" && (
+                <div role="alert">
+                  <p>{personSearchError}</p>
+                  <button
+                    className="zas-admin-secondary-button"
+                    onClick={() => setPersonSearchAttempt((attempt) => attempt + 1)}
+                    type="button"
+                  >
+                    Coba lagi
+                  </button>
+                </div>
+              )}
+              {currentSearchStatus === "success" && currentSearchResults.length === 0 && (
+                <p role="status">Tidak ada identitas anggota yang cocok.</p>
+              )}
+              <div
+                aria-label="Hasil pencarian identitas anggota"
+                className="zas-sales-person-results"
+                hidden={currentSearchResults.length === 0}
+                id={`${formId}-person-results`}
+                role="listbox"
+              >
+                {currentSearchResults.map((person, index) => (
+                  <button
+                    aria-selected={activePersonIndex === index}
+                    className="zas-sales-person-result"
+                    id={`${formId}-person-option-${index}`}
+                    key={person.id}
+                    onClick={() => selectPerson(person)}
+                    role="option"
+                    type="button"
+                  >
+                    <strong>{person.fullName}</strong>
+                    <span>{person.memberCode}</span>
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
+          {selectedPerson && (
+            <div className="zas-sales-person-selected">
+              <strong>{selectedPerson.fullName}</strong>
+              <small>{selectedPerson.memberCode} · identitas global terpilih</small>
+              <button
+                className="zas-admin-secondary-button"
+                onClick={() => setSelectedPerson(null)}
+                type="button"
+              >
+                Ganti identitas
+              </button>
+            </div>
+          )}
           {fieldErrors.personId && (
             <span className="zas-sales-field-error" id={`${formId}-personId-error`}>
               {fieldErrors.personId}

@@ -9,6 +9,12 @@ import { selectSalesTrend } from "../lib/sales/chart-data";
 import { formatSalesMemberCode } from "../lib/sales/member-code";
 import { calculateSalesTargetAchievement } from "../lib/sales/target-achievement";
 import { validateSalesMember } from "../lib/sales/validation";
+import {
+  ADMIN_SALES_PERSON_SEARCH_MIN_LENGTH,
+  ADMIN_SALES_PERSON_SEARCH_LIMIT,
+  formatAdminSalesPersonSearchResults,
+  normalizeAdminSalesPersonSearch,
+} from "../lib/sales/admin-person-search";
 
 function memberForm(overrides: Record<string, string> = {}): FormData {
   const form = new FormData();
@@ -101,6 +107,36 @@ test("a registered global identity can be selected without submitting its editab
   }));
   assert.equal(valid.success, true);
   if (valid.success) assert.equal(valid.data.personId, "00000000-0000-4000-8000-000000000002");
+});
+
+test("admin identity search normalizes bounded queries and requires at least two characters", () => {
+  assert.equal(normalizeAdminSalesPersonSearch("  ad  "), "ad");
+  assert.equal(normalizeAdminSalesPersonSearch(" a "), "a");
+  assert.equal(normalizeAdminSalesPersonSearch("x".repeat(81)).length, 80);
+  assert.equal(normalizeAdminSalesPersonSearch(null), "");
+  assert.equal(ADMIN_SALES_PERSON_SEARCH_MIN_LENGTH, 2);
+});
+
+test("admin identity search returns empty, one, or at most ten minimal identity results", () => {
+  assert.deepEqual(formatAdminSalesPersonSearchResults([]), []);
+  assert.deepEqual(
+    formatAdminSalesPersonSearchResults([
+      { id: "person-1", fullName: "Ada Lovelace", memberCode: "P-001" },
+    ]),
+    [{ id: "person-1", fullName: "Ada Lovelace", memberCode: "P-001" }],
+  );
+
+  const manyPeople = Array.from({ length: 15 }, (_, index) => ({
+    id: `person-${index}`,
+    fullName: `Person ${index}`,
+    memberCode: `P-${index}`,
+    email: `person-${index}@example.test`,
+  }));
+  const results = formatAdminSalesPersonSearchResults(manyPeople);
+
+  assert.equal(ADMIN_SALES_PERSON_SEARCH_LIMIT, 10);
+  assert.equal(results.length, 10);
+  assert.deepEqual(Object.keys(results[0] ?? {}).sort(), ["fullName", "id", "memberCode"]);
 });
 
 test("commission is 10% of the normal subtotal and is zero for free orders", () => {

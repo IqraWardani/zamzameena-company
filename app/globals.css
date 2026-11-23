@@ -11886,6 +11886,98 @@ body:has(.zas-admin-route) {
   line-height: 1.4;
 }
 
+.zas-sales-person-picker {
+  position: relative;
+}
+
+.zas-sales-person-results,
+.zas-sales-person-selected {
+  display: grid;
+  min-width: 0;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid #c6d0d4;
+  border-radius: 6px;
+  background: #fff;
+  color: #17232b;
+}
+
+.zas-sales-person-results {
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.zas-sales-person-results[hidden] {
+  display: none;
+}
+
+.zas-sales-person-results > p,
+.zas-sales-person-results > div > p {
+  margin: 0;
+  color: #435159;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.zas-sales-person-result {
+  display: flex;
+  min-width: 0;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 10px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  font: inherit;
+  text-align: left;
+}
+
+.zas-sales-person-result[aria-selected="true"],
+.zas-sales-person-result:hover {
+  background: #f2f4f4;
+}
+
+.zas-sales-person-result:focus-visible {
+  outline: 2px solid #9c6e35;
+  outline-offset: -2px;
+}
+
+.zas-sales-person-result > strong,
+.zas-sales-person-result > span,
+.zas-sales-person-selected > strong,
+.zas-sales-person-selected > small {
+  overflow-wrap: anywhere;
+}
+
+.zas-sales-person-result > span,
+.zas-sales-person-selected > small {
+  color: #5d6b72;
+  font-size: 11px;
+}
+
+.zas-sales-person-selected > .zas-admin-secondary-button {
+  justify-self: start;
+}
+
+.zas-sales-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  color: var(--zas-muted);
+  font-size: 12px;
+}
+
+.zas-sales-pagination > div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
 .zas-sales-supervisor-note {
   align-content: center;
   min-height: 72px;

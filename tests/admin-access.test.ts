@@ -73,6 +73,25 @@ test("marketing director is denied sales management even when another role grant
   );
 });
 
+test("sales management requires the permission and event assignment", () => {
+  assert.deepEqual(
+    authorizeAdmin(
+      { id: "admin-1", permissions: ["sales.manage"], eventIds: ["event-1"] },
+      "sales.manage",
+      "event-1",
+    ),
+    { allowed: true },
+  );
+  assert.deepEqual(
+    authorizeAdmin(
+      { id: "admin-1", permissions: ["sales.manage"], eventIds: ["event-1"] },
+      "sales.manage",
+      "event-2",
+    ),
+    { allowed: false, reason: "event_scope_denied" },
+  );
+});
+
 test("admin passwords are stored as verifiable scrypt hashes", async () => {
   const password = "correct horse battery staple";
   const passwordHash = await hashAdminPassword(password);
