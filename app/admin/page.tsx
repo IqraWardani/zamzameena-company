@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { logout } from "@/app/admin/actions";
 import { AdminSharedDashboard } from "@/components/admin/admin-shared-dashboard";
 import { requireAdminPermission } from "@/lib/admin/authorization";
+import { getAdminDashboardSummary } from "@/lib/admin/dashboard-summary";
 import { EVENT_PERMISSIONS } from "@/lib/admin/event-validation";
 import { prisma } from "@/lib/db";
 
@@ -37,65 +38,73 @@ export default async function AdminDashboard() {
   );
   const eventIds = [...session.eventIds];
 
-  const [recentEvents, recentRegistrations, pendingVerificationCount] =
+  const [
+    recentEvents,
+    recentRegistrations,
+    pendingVerificationCount,
+    exportEvents,
+    summary,
+  ] = await Promise.all([
     canReadEvents && eventIds.length > 0
-      ? await Promise.all([
-          prisma.event.findMany({
-            where: { id: { in: eventIds } },
-            select: {
-              id: true,
-              name: true,
-              status: true,
-              startsAt: true,
-              timezone: true,
+      ? prisma.event.findMany({
+          where: { id: { in: eventIds } },
+          select: {
+            id: true,
+            name: true,
+            status: true,
+            startsAt: true,
+            timezone: true,
+          },
+          orderBy: [{ createdAt: "desc" }, { name: "asc" }],
+          take: 5,
+        })
+      : Promise.resolve([]),
+    canReviewPayments && eventIds.length > 0
+      ? prisma.registration.findMany({
+          where: { eventId: { in: eventIds } },
+          select: {
+            id: true,
+            registeredAt: true,
+            participantProfile: { select: { fullName: true } },
+            ticketType: { select: { name: true, priceAmount: true } },
+            invoices: {
+              select: {
+                invoiceNumber: true,
+                status: true,
+                issuedAt: true,
+                payments: {
+                  select: { status: true, submittedAt: true },
+                  orderBy: [{ submittedAt: "desc" }, { id: "desc" }],
+                  take: 1,
+                },
+              },
+              orderBy: [{ issuedAt: "desc" }, { id: "desc" }],
+              take: 1,
             },
-            orderBy: [{ createdAt: "desc" }, { name: "asc" }],
-            take: 5,
-          }),
-          canReviewPayments
-            ? prisma.registration.findMany({
-                where: { eventId: { in: eventIds } },
-                select: {
-                  id: true,
-                  registeredAt: true,
-                  participantProfile: { select: { fullName: true } },
-                  ticketType: { select: { name: true, priceAmount: true } },
-                  invoices: {
-                    select: {
-                      invoiceNumber: true,
-                      status: true,
-                      issuedAt: true,
-                      payments: {
-                        select: { status: true, submittedAt: true },
-                        orderBy: [{ submittedAt: "desc" }, { id: "desc" }],
-                        take: 1,
-                      },
-                    },
-                    orderBy: [{ issuedAt: "desc" }, { id: "desc" }],
-                    take: 1,
-                  },
-                },
-                orderBy: [{ registeredAt: "desc" }, { id: "desc" }],
-                take: 8,
-              })
-            : Promise.resolve([]),
-          canReviewPayments
-            ? prisma.payment.count({
-                where: {
-                  status: "submitted",
-                  invoice: { registration: { eventId: { in: eventIds } } },
-                },
-              })
-            : Promise.resolve(null),
-        ])
-      : [[], [], null] as const;
-  const exportEvents = canReviewPayments && eventIds.length > 0
-    ? await prisma.event.findMany({
-        where: { id: { in: eventIds } },
-        select: { id: true, name: true },
-        orderBy: [{ startsAt: "desc" }, { name: "asc" }],
-      })
-    : [];
+          },
+          orderBy: [{ registeredAt: "desc" }, { id: "desc" }],
+          take: 8,
+        })
+      : Promise.resolve([]),
+    canReviewPayments && eventIds.length > 0
+      ? prisma.payment.count({
+          where: {
+            status: "submitted",
+            invoice: { registration: { eventId: { in: eventIds } } },
+          },
+        })
+      : Promise.resolve(null),
+    canReviewPayments && eventIds.length > 0
+      ? prisma.event.findMany({
+          where: { id: { in: eventIds } },
+          select: { id: true, name: true },
+          orderBy: [{ startsAt: "desc" }, { name: "asc" }],
+        })
+      : Promise.resolve([]),
+    canReadEvents
+      ? getAdminDashboardSummary(eventIds)
+      : Promise.resolve(null),
+  ]);
 
   return (
     <main className="zas-admin-page zas-admin-dashboard">
@@ -117,7 +126,7 @@ export default async function AdminDashboard() {
         </div>
       </header>
 
-      <AdminSharedDashboard session={session} />
+      <AdminSharedDashboard session={session} summary={summary} />
 
       <section aria-labelledby="admin-latest-registrations-title" className="zas-admin-card zas-admin-wide-card zas-admin-registrations-card">
         <div className="zas-admin-section-heading">

@@ -5,17 +5,22 @@ import {
 } from "@/components/admin/admin-summary-cards";
 import { EVENT_PERMISSIONS } from "@/lib/admin/event-validation";
 import type { AdminSession } from "@/lib/admin/authorization";
+import {
+  getAdminDashboardSummary,
+  type AdminDashboardSummary,
+} from "@/lib/admin/dashboard-summary";
 import { getAdminNavigationItems } from "@/lib/admin/navigation-items";
-import { prisma } from "@/lib/db";
 
 export async function AdminSharedDashboard({
   session,
+  summary: providedSummary,
   additionalMetrics = [],
   ariaLabel = "Ringkasan Event",
   summaryClassName = "",
   showSummary = true,
 }: {
   session: AdminSession;
+  summary?: AdminDashboardSummary | null;
   additionalMetrics?: AdminSummaryMetric[];
   ariaLabel?: string;
   summaryClassName?: string;
@@ -23,40 +28,35 @@ export async function AdminSharedDashboard({
 }) {
   const canReadEvents = session.permissions.includes(EVENT_PERMISSIONS.read);
   const eventIds = [...session.eventIds];
-  const [totalEvents, draftEvents, publishedEvents, totalRegistrations] =
-    showSummary && canReadEvents && eventIds.length > 0
-      ? await Promise.all([
-          prisma.event.count({ where: { id: { in: eventIds } } }),
-          prisma.event.count({ where: { id: { in: eventIds }, status: "draft" } }),
-          prisma.event.count({ where: { id: { in: eventIds }, status: "published" } }),
-          prisma.registration.count({ where: { eventId: { in: eventIds } } }),
-        ])
-      : [null, null, null, null];
+  const summary =
+    providedSummary === undefined && showSummary && canReadEvents
+      ? await getAdminDashboardSummary(eventIds)
+      : providedSummary;
   const metrics: AdminSummaryMetric[] = [
     {
       label: "Total Event",
-      value: totalEvents,
+      value: summary?.totalEvents ?? null,
       description: "Event dalam penugasan Anda",
       icon: "events",
       tone: "events",
     },
     {
       label: "Draft",
-      value: draftEvents,
+      value: summary?.draftEvents ?? null,
       description: "Event yang masih disiapkan",
       icon: "draft",
       tone: "draft",
     },
     {
       label: "Published",
-      value: publishedEvents,
+      value: summary?.publishedEvents ?? null,
       description: "Event yang sudah tayang",
       icon: "published",
       tone: "published",
     },
     {
       label: "Pendaftaran",
-      value: totalRegistrations,
+      value: summary?.totalRegistrations ?? null,
       description: "Seluruh status pendaftaran",
       icon: "registrations",
       tone: "registrations",

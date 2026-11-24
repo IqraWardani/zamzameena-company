@@ -17,13 +17,14 @@ Company profile PT Zamzameena Ainsa Synergy menggunakan Next.js App Router. Hala
 
 ## Setup Database
 
-The contact form writes to `contact_submissions` only; it does not create participant profiles. Create a PostgreSQL database using Neon or Supabase, then copy its connection string into a new `.env.local` file in the project root as `DATABASE_URL="..."`. For local PostgreSQL, use the connection string for your local database. Use `.env.example` as a format reference; do not commit `.env.local` or any secret.
+The contact form writes to `contact_submissions` only; it does not create participant profiles. Create a PostgreSQL database using Neon or Supabase, then set `DATABASE_URL` and `DIRECT_URL` in `.env.local`. `DATABASE_URL` is used by the running application through `pg.Pool`; for Vercel/serverless deployments, use the Supabase transaction pooler. `DIRECT_URL` is used by Prisma CLI commands, including client generation and migrations; use a direct or session-mode connection, not the transaction pooler. For local development, both variables may point to the same local PostgreSQL database. Use `.env.example` as a format reference; do not commit `.env.local` or any secret.
 
 ### Local PostgreSQL setup (safe, no migration run)
 
 - Copy `.env.example` to `.env.local`.
-- Update `DATABASE_URL` only in your local environment.
+- Set `DATABASE_URL` and `DIRECT_URL` only in your local environment. Both may use the same local PostgreSQL URL.
 - Keep the value local to the machine; never commit or share the real connection string.
+- `DIRECT_URL` is required when Prisma loads `prisma.config.ts`, including `prisma generate` during a build. There is intentionally no fallback to `DATABASE_URL`.
 - Use the health endpoint to confirm the app is configured without exposing the URL or password: `npm run dev` then `curl -fsS http://localhost:3000/api/health`.
 - Do not run Prisma migrations, resets, truncates, or destructive commands during initial setup. Approved additive migrations are documented below and must be applied only after a database backup.
 
@@ -54,7 +55,7 @@ The contact form writes to `contact_submissions` only; it does not create partic
 - Sales members are event-scoped records (ARM, Kepala Cabang, Sales) and do not have dashboard logins. PostgreSQL enforces same-event reporting lines, the 5 ARM / 5 branch managers per ARM / 2 sales per branch active-member limits, unique member/referral codes, and immutable registration attribution except inside the audited admin correction action. Members with registrations, commissions, or direct reports are deactivated instead of physically deleted.
 - Referral links use `/events/<event-slug>/register?ref=<CODE>`. The public form checks a code for the published event, but registration validates it again inside the database transaction and records both the seller ID and referral-code snapshot. Inactive members cannot receive new referrals. Historical invoice prices remain based on invoice snapshots; legacy invoices whose exact unit-price snapshot is unknown keep those fields NULL rather than inferring them from today's ticket price.
 - Invoice snapshots include unit price, quantity, normal subtotal, discount, and amount due. Current registrations create one-ticket invoices with zero discount; `ticket_types.price_amount` remains the sole price source. Payment approval creates one idempotent 10% earned commission entry on the direct seller's normal subtotal in the same transaction that confirms payment and issues the ticket. Free registrations and orders with zero amount due do not earn commission. The ledger supports future adjustment entries; no refund workflow or commission-payout processing is implemented.
-- Before applying production migrations, take and verify a database backup. Apply pending SQL migrations with `npm run prisma:migrate:deploy`; this command uses `.env.local` and does not reset or seed data. The sales module is introduced by `prisma/migrations/20261120_0004_sales_management_referrals_commissions/migration.sql`. Generate the Prisma client with `npm run prisma:generate` after the migration.
+- Before applying production migrations, take and verify a database backup. Apply pending SQL migrations with `npm run prisma:migrate:deploy`; Prisma CLI uses `DIRECT_URL` from `.env.local` and does not reset or seed data. The sales module is introduced by `prisma/migrations/20261120_0004_sales_management_referrals_commissions/migration.sql`. Generate the Prisma client with `npm run prisma:generate` after the migration; this command also requires `DIRECT_URL`.
 - `npm run test:contact` covers contact validation and separation, notification payload minimization, contacts permission checks, and private payment-proof access rules.
 
 ## Mengubah informasi

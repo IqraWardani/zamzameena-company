@@ -6,11 +6,17 @@ import { requireAdminPermission } from "@/lib/admin/authorization";
 import { prisma } from "@/lib/db";
 
 type CheckInPageProps = {
-  searchParams: Promise<{ eventId?: string; q?: string; readyPage?: string }>;
+  searchParams: Promise<{
+    eventId?: string;
+    q?: string;
+    readyPage?: string;
+    historyPage?: string;
+  }>;
 };
 
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const READY_PAGE_SIZE = 20;
+const HISTORY_PAGE_SIZE = 25;
 
 function parsePage(value?: string): number {
   const page = Number(value);
@@ -26,7 +32,12 @@ function formatDateTime(date: Date, timezone: string): string {
 }
 
 export default async function AdminCheckInPage({ searchParams }: CheckInPageProps) {
-  const { eventId: requestedEventId, q: rawQuery, readyPage: rawReadyPage } = await searchParams;
+  const {
+    eventId: requestedEventId,
+    q: rawQuery,
+    readyPage: rawReadyPage,
+    historyPage: rawHistoryPage,
+  } = await searchParams;
   const { session, decision } = await requireAdminPermission(EVENT_PERMISSIONS.recordCheckIns, "/admin/check-in");
   if (!session) redirect("/admin/login");
   if (!decision.allowed) redirect("/admin/access-denied");
@@ -48,10 +59,21 @@ export default async function AdminCheckInPage({ searchParams }: CheckInPageProp
   const selectedEvent = events.find((event) => event.id === selectedEventId);
   const searchQuery = rawQuery?.trim().slice(0, 200) ?? "";
   const requestedReadyPage = parsePage(rawReadyPage);
+  const requestedHistoryPage = parsePage(rawHistoryPage);
 
-  const registrations =
+  const readyWhere = selectedEvent
+    ? {
+        eventId: selectedEvent.id,
+        status: "confirmed" as const,
+        tickets: { some: { status: "active" as const } },
+        invoices: { some: { status: "paid" as const } },
+        invitationCollection: { isNot: null },
+        checkIn: { is: null },
+      }
+    : null;
+  const [registrations, readyTotal, historyTotal] = await Promise.all([
     selectedEvent && searchQuery.length >= 2
-      ? await prisma.registration.findMany({
+      ? prisma.registration.findMany({
           where: {
             eventId: selectedEvent.id,
             OR: [
@@ -92,65 +114,72 @@ export default async function AdminCheckInPage({ searchParams }: CheckInPageProp
           orderBy: { registeredAt: "desc" },
           take: 25,
         })
-      : [];
-  const readyWhere = selectedEvent
-    ? {
-        eventId: selectedEvent.id,
-        status: "confirmed" as const,
-        tickets: { some: { status: "active" as const } },
-        invoices: { some: { status: "paid" as const } },
-        invitationCollection: { isNot: null },
-        checkIn: { is: null },
-      }
-    : null;
-  const readyTotal = readyWhere ? await prisma.registration.count({ where: readyWhere }) : 0;
+      : Promise.resolve([]),
+    readyWhere ? prisma.registration.count({ where: readyWhere }) : Promise.resolve(0),
+    selectedEvent
+      ? prisma.checkIn.count({ where: { eventId: selectedEvent.id } })
+      : Promise.resolve(0),
+  ]);
   const readyPageCount = Math.max(1, Math.ceil(readyTotal / READY_PAGE_SIZE));
   const readyPage = Math.min(requestedReadyPage, readyPageCount);
-  const readyRegistrations = readyWhere
-    ? await prisma.registration.findMany({
-        where: readyWhere,
-        select: {
-          id: true,
-          registrationNumber: true,
-          participantProfile: { select: { fullName: true } },
-          invoices: {
-            where: { status: "paid" },
-            orderBy: [{ paidAt: "desc" }, { issuedAt: "desc" }],
-            take: 1,
-            select: {
-              invoiceNumber: true,
-              legacyInvoiceNumber: true,
-              status: true,
+  const historyPageCount = Math.max(1, Math.ceil(historyTotal / HISTORY_PAGE_SIZE));
+  const historyPage = Math.min(requestedHistoryPage, historyPageCount);
+  const [readyRegistrations, checkInHistory] = await Promise.all([
+    readyWhere
+      ? prisma.registration.findMany({
+          where: readyWhere,
+          select: {
+            id: true,
+            registrationNumber: true,
+            participantProfile: { select: { fullName: true } },
+            invoices: {
+              where: { status: "paid" },
+              orderBy: [{ paidAt: "desc" }, { issuedAt: "desc" }],
+              take: 1,
+              select: {
+                invoiceNumber: true,
+                legacyInvoiceNumber: true,
+                status: true,
+              },
+            },
+            invitationCollection: { select: { collectedAt: true } },
+          },
+          orderBy: [{ confirmedAt: "asc" }, { id: "asc" }],
+          skip: (readyPage - 1) * READY_PAGE_SIZE,
+          take: READY_PAGE_SIZE,
+        })
+      : Promise.resolve([]),
+    selectedEvent
+      ? prisma.checkIn.findMany({
+          where: { eventId: selectedEvent.id },
+          select: {
+            id: true,
+            checkedInAt: true,
+            registration: {
+              select: {
+                registrationNumber: true,
+                participantProfile: { select: { fullName: true } },
+              },
             },
           },
-          invitationCollection: { select: { collectedAt: true } },
-        },
-        orderBy: [{ confirmedAt: "asc" }, { id: "asc" }],
-        skip: (readyPage - 1) * READY_PAGE_SIZE,
-        take: READY_PAGE_SIZE,
-      })
-    : [];
-  const checkInHistory = selectedEvent
-    ? await prisma.checkIn.findMany({
-        where: { eventId: selectedEvent.id },
-        select: {
-          id: true,
-          checkedInAt: true,
-          registration: {
-            select: {
-              registrationNumber: true,
-              participantProfile: { select: { fullName: true } },
-            },
-          },
-        },
-        orderBy: [{ checkedInAt: "desc" }, { id: "desc" }],
-      })
-    : [];
+          orderBy: [{ checkedInAt: "desc" }, { id: "desc" }],
+          skip: (historyPage - 1) * HISTORY_PAGE_SIZE,
+          take: HISTORY_PAGE_SIZE,
+        })
+      : Promise.resolve([]),
+  ]);
   const readyPageHref = (page: number) => {
     const params = new URLSearchParams();
     if (selectedEvent) params.set("eventId", selectedEvent.id);
     if (searchQuery) params.set("q", searchQuery);
     params.set("readyPage", String(page));
+    return `/admin/check-in?${params.toString()}`;
+  };
+  const historyPageHref = (page: number) => {
+    const params = new URLSearchParams();
+    if (selectedEvent) params.set("eventId", selectedEvent.id);
+    if (searchQuery) params.set("q", searchQuery);
+    params.set("historyPage", String(page));
     return `/admin/check-in?${params.toString()}`;
   };
 
@@ -335,7 +364,7 @@ export default async function AdminCheckInPage({ searchParams }: CheckInPageProp
                   <h2 id="check-in-history-title">Daftar Sudah Check-in</h2>
                 </div>
                 <p className="zas-participant-result-count">
-                  {checkInHistory.length.toLocaleString("id-ID")} peserta
+                  {historyTotal.toLocaleString("id-ID")} peserta
                 </p>
               </div>
               {checkInHistory.length === 0 ? (
@@ -368,6 +397,27 @@ export default async function AdminCheckInPage({ searchParams }: CheckInPageProp
                     </tbody>
                   </table>
                 </div>
+              )}
+              {historyPageCount > 1 && (
+                <nav aria-label="Halaman riwayat check-in" className="zas-admin-pagination">
+                  <a
+                    aria-disabled={historyPage <= 1}
+                    className={historyPage <= 1 ? "is-disabled" : undefined}
+                    href={historyPage <= 1 ? undefined : historyPageHref(historyPage - 1)}
+                  >
+                    Sebelumnya
+                  </a>
+                  <span>
+                    Halaman {historyPage} dari {historyPageCount}
+                  </span>
+                  <a
+                    aria-disabled={historyPage >= historyPageCount}
+                    className={historyPage >= historyPageCount ? "is-disabled" : undefined}
+                    href={historyPage >= historyPageCount ? undefined : historyPageHref(historyPage + 1)}
+                  >
+                    Berikutnya
+                  </a>
+                </nav>
               )}
             </section>
           )}
