@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { DashboardBackLink } from "@/components/admin/dashboard-back-link";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };

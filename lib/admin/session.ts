@@ -32,8 +32,8 @@ export async function createAdminSessionToken(adminUserId: string): Promise<stri
 export async function readAdminSessionToken(
   token: string,
 ): Promise<{ adminUserId: string } | null> {
-  const key = getSessionKey();
   try {
+    const key = getSessionKey();
     const { payload } = await jwtVerify(token, key, {
       algorithms: ["HS256"],
       issuer: SESSION_ISSUER,

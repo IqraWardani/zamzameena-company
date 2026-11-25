@@ -14,6 +14,4 @@ export const prisma =
     adapter: new PrismaPg({ connectionString: getDatabaseUrl() }),
   });
 
-if (process.env.NODE_ENV !== "production") {
-  globalForPrisma.prisma = prisma;
-}
+globalForPrisma.prisma = prisma;
