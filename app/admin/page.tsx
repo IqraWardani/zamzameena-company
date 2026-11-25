@@ -1,3 +1,4 @@
+import { Prisma } from "@prisma/client";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { logout } from "@/app/admin/actions";
@@ -13,6 +14,15 @@ const eventStatusLabels: Record<string, string> = {
   closed: "Ditutup",
   cancelled: "Dibatalkan",
   archived: "Diarsipkan",
+};
+
+type CombinedDashboardEvent = {
+  id: string;
+  name: string;
+  status: string;
+  startsAt: Date;
+  timezone: string;
+  recentRank: number;
 };
 
 function formatEventDate(date: Date, timezone: string): string {
@@ -37,15 +47,37 @@ export default async function AdminDashboard() {
     EVENT_PERMISSIONS.reviewPayments,
   );
   const eventIds = [...session.eventIds];
+  const canCombineEventQueries =
+    canReadEvents && canReviewPayments && eventIds.length > 0;
 
   const [
-    recentEvents,
+    combinedEvents,
+    fallbackRecentEvents,
     recentRegistrations,
     pendingVerificationCount,
-    exportEvents,
-    summary,
+    fallbackExportEvents,
+    combinedRegistrationCount,
+    fallbackSummary,
   ] = await Promise.all([
-    canReadEvents && eventIds.length > 0
+    canCombineEventQueries
+      ? prisma.$queryRaw<CombinedDashboardEvent[]>(Prisma.sql`
+          SELECT
+            event.id,
+            event.name,
+            event.status::text AS status,
+            event.starts_at AS "startsAt",
+            event.timezone,
+            (ROW_NUMBER() OVER (
+              ORDER BY event.created_at DESC, event.name ASC
+            ))::integer AS "recentRank"
+          FROM events AS event
+          WHERE event.id IN (${Prisma.join(
+            eventIds.map((eventId) => Prisma.sql`${eventId}::uuid`),
+          )})
+          ORDER BY event.starts_at DESC, event.name ASC
+        `)
+      : Promise.resolve(null),
+    canReadEvents && eventIds.length > 0 && !canCombineEventQueries
       ? prisma.event.findMany({
           where: { id: { in: eventIds } },
           select: {
@@ -94,17 +126,47 @@ export default async function AdminDashboard() {
           },
         })
       : Promise.resolve(null),
-    canReviewPayments && eventIds.length > 0
+    canReviewPayments && eventIds.length > 0 && !canCombineEventQueries
       ? prisma.event.findMany({
           where: { id: { in: eventIds } },
           select: { id: true, name: true },
           orderBy: [{ startsAt: "desc" }, { name: "asc" }],
         })
       : Promise.resolve([]),
-    canReadEvents
+    canCombineEventQueries
+      ? prisma.registration.count({ where: { eventId: { in: eventIds } } })
+      : Promise.resolve(null),
+    canReadEvents && !canCombineEventQueries
       ? getAdminDashboardSummary(eventIds)
       : Promise.resolve(null),
   ]);
+  const recentEvents = combinedEvents
+    ? combinedEvents
+        .filter((event) => event.recentRank <= 5)
+        .sort((first, second) => first.recentRank - second.recentRank)
+        .map(({ id, name, status, startsAt, timezone }) => ({
+          id,
+          name,
+          status,
+          startsAt,
+          timezone,
+        }))
+    : fallbackRecentEvents;
+  const exportEvents = combinedEvents
+    ? combinedEvents.map(({ id, name }) => ({ id, name }))
+    : fallbackExportEvents;
+  const summary = combinedEvents
+    ? {
+        totalEvents: combinedEvents.length,
+        draftEvents: combinedEvents.filter(
+          (event) => event.status === "draft",
+        ).length,
+        publishedEvents: combinedEvents.filter(
+          (event) => event.status === "published",
+        ).length,
+        totalRegistrations: combinedRegistrationCount ?? 0,
+      }
+    : fallbackSummary;
 
   return (
     <main className="zas-admin-page zas-admin-dashboard">

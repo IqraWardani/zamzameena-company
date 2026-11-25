@@ -1046,6 +1046,7 @@ body:has(.zas-admin-route) {
 }
 
 .zas-admin-navigation a {
+  position: relative;
   display: inline-flex;
   min-height: 38px;
   align-items: center;
@@ -1057,6 +1058,7 @@ body:has(.zas-admin-route) {
   font-size: 10px;
   font-weight: 600;
   text-decoration: none;
+  overflow: hidden;
   transition:
     color 150ms ease,
     background 150ms ease,
@@ -1069,14 +1071,57 @@ body:has(.zas-admin-route) {
 }
 
 .zas-admin-navigation a.is-active {
-  border-color: rgb(213 173 120 / 30%);
-  background: rgb(213 173 120 / 10%);
   color: var(--zas-accent);
 }
 
-.zas-admin-navigation a span {
+.zas-admin-navigation a.is-pending {
+  color: var(--zas-accent);
+  border-color: rgb(213 173 120 / 30%);
+}
+
+.zas-admin-nav-pill {
+  position: absolute;
+  inset: 0;
+  border-radius: 5px;
+  background: rgb(213 173 120 / 12%);
+  border: 1px solid rgb(213 173 120 / 30%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.zas-admin-nav-label {
+  position: relative;
+  z-index: 1;
+}
+
+.zas-admin-navigation a span:not(.zas-admin-nav-pill) {
+  position: relative;
+  z-index: 1;
   color: var(--zas-accent);
   font-size: 12px;
+}
+
+.zas-admin-nav-spinner,
+.zas-admin-back-spinner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  animation: zas-admin-spin 0.75s linear infinite;
+  color: var(--zas-accent);
+}
+
+.zas-admin-nav-spinner svg,
+.zas-admin-back-spinner svg {
+  display: block;
+}
+
+@keyframes zas-admin-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .zas-admin-pending-summary {
@@ -11390,8 +11435,237 @@ body:has(.zas-admin-route) {
   }
 }
 
-.zas-admin-route > .zas-admin-page:not(.zas-admin-login-page) {
+.zas-admin-route > .zas-admin-page:not(.zas-admin-login-page),
+.zas-admin-page-transition > .zas-admin-page:not(.zas-admin-login-page) {
   padding-top: 28px;
+}
+
+/* Framer Motion Admin Realtime Loading & Transitions */
+.zas-admin-page-transition {
+  width: 100%;
+}
+
+.zas-admin-progress-bar-wrap {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 99999;
+  pointer-events: none;
+  background: transparent;
+}
+
+.zas-admin-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #d5ad78 0%, #fff1d0 50%, #d5ad78 100%);
+  box-shadow: 0 0 10px rgba(213, 173, 120, 0.75), 0 0 4px rgba(213, 173, 120, 0.9);
+  border-radius: 0 2px 2px 0;
+  transform-origin: left center;
+}
+
+.zas-admin-floating-loading {
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 99998;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  background: rgb(18 27 34 / 94%);
+  border: 1px solid rgb(213 173 120 / 35%);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), 0 0 14px rgba(213, 173, 120, 0.2);
+  color: var(--zas-accent);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  pointer-events: none;
+}
+
+.zas-admin-floating-spinner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  animation: zas-admin-spin 0.75s linear infinite;
+}
+
+.zas-admin-floating-spinner svg {
+  display: block;
+}
+
+.zas-admin-floating-text {
+  user-select: none;
+}
+
+/* Admin Dashboard Skeleton Loading Screen */
+.zas-admin-loading-page {
+  display: grid;
+  gap: 22px;
+}
+
+.zas-admin-loading-announcement {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.zas-admin-skeleton-line {
+  border-radius: 4px;
+  background: linear-gradient(
+    90deg,
+    rgb(255 255 255 / 4%) 0%,
+    rgb(213 173 120 / 12%) 50%,
+    rgb(255 255 255 / 4%) 100%
+  );
+  background-size: 200% 100%;
+  animation: zas-skeleton-shimmer 1.8s infinite ease-in-out;
+}
+
+.zas-admin-skeleton-eyebrow {
+  width: 160px;
+  height: 12px;
+  margin-bottom: 8px;
+}
+
+.zas-admin-skeleton-title {
+  width: 220px;
+  height: 32px;
+  margin-bottom: 8px;
+}
+
+.zas-admin-skeleton-subtitle {
+  width: 180px;
+  height: 14px;
+}
+
+.zas-admin-skeleton-button {
+  width: 130px;
+  height: 40px;
+  border-radius: 6px;
+  background: linear-gradient(
+    90deg,
+    rgb(255 255 255 / 4%) 0%,
+    rgb(213 173 120 / 12%) 50%,
+    rgb(255 255 255 / 4%) 100%
+  );
+  background-size: 200% 100%;
+  animation: zas-skeleton-shimmer 1.8s infinite ease-in-out;
+}
+
+.zas-admin-skeleton-nav {
+  gap: 6px;
+}
+
+.zas-admin-skeleton-nav-item {
+  height: 36px;
+  border-radius: 5px;
+  background: linear-gradient(
+    90deg,
+    rgb(255 255 255 / 4%) 0%,
+    rgb(213 173 120 / 10%) 50%,
+    rgb(255 255 255 / 4%) 100%
+  );
+  background-size: 200% 100%;
+  animation: zas-skeleton-shimmer 1.8s infinite ease-in-out;
+}
+
+.zas-admin-skeleton-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.zas-admin-skeleton-card {
+  padding: 18px;
+  border-radius: 8px;
+  border: 1px solid var(--zas-line);
+  background: rgb(14 22 28 / 78%);
+  display: grid;
+  gap: 12px;
+}
+
+.zas-admin-skeleton-card .zas-admin-summary-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.zas-admin-skeleton-label {
+  width: 90px;
+  height: 12px;
+}
+
+.zas-admin-skeleton-icon {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: rgb(213 173 120 / 10%);
+}
+
+.zas-admin-skeleton-metric {
+  width: 60px;
+  height: 28px;
+}
+
+.zas-admin-skeleton-desc {
+  width: 140px;
+  height: 10px;
+}
+
+.zas-admin-skeleton-section {
+  display: grid;
+  gap: 16px;
+  min-height: 240px;
+}
+
+.zas-admin-skeleton-section-title {
+  width: 170px;
+  height: 20px;
+  margin-top: 6px;
+}
+
+.zas-admin-skeleton-table {
+  display: grid;
+  gap: 10px;
+}
+
+.zas-admin-skeleton-table-header {
+  height: 38px;
+  border-radius: 4px;
+  background: rgb(255 255 255 / 4%);
+}
+
+.zas-admin-skeleton-table-row {
+  height: 48px;
+  border-radius: 4px;
+  background: linear-gradient(
+    90deg,
+    rgb(255 255 255 / 3%) 0%,
+    rgb(213 173 120 / 8%) 50%,
+    rgb(255 255 255 / 3%) 100%
+  );
+  background-size: 200% 100%;
+  animation: zas-skeleton-shimmer 1.8s infinite ease-in-out;
+}
+
+@keyframes zas-skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }
 
 .zas-sales-page > * {

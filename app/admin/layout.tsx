@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { AdminPageTransition } from "@/components/admin/admin-page-transition";
 import { DashboardBackLink } from "@/components/admin/dashboard-back-link";
 
 export const metadata: Metadata = {
@@ -8,8 +9,10 @@ export const metadata: Metadata = {
 export default async function AdminLayout({ children }: LayoutProps<"/admin">) {
   return (
     <div className="zas-admin-route">
-      {children}
-      <DashboardBackLink />
+      <AdminPageTransition>
+        {children}
+        <DashboardBackLink />
+      </AdminPageTransition>
     </div>
   );
 }
