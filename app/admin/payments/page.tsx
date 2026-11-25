@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
 import type { Prisma } from "@prisma/client";
 import { redirect } from "next/navigation";
-import {
-  ParticipantManagementTable,
-  type ParticipantManagementRow,
-} from "@/components/admin/participant-management-table";
+import dynamic from "next/dynamic";
+import type { ParticipantManagementRow } from "@/components/admin/participant-management-table";
 import type { AdminSummaryMetric } from "@/components/admin/admin-summary-cards";
 import { AdminSharedDashboard } from "@/components/admin/admin-shared-dashboard";
 import { EVENT_PERMISSIONS } from "@/lib/admin/event-validation";
@@ -12,6 +10,25 @@ import { requireAdminPermission } from "@/lib/admin/authorization";
 import { getParticipantPaymentStatus, getParticipantPaymentWhere } from "@/lib/payments/participant-status";
 import { REGISTRATION_DETAIL_ANSWER_KEYS } from "@/lib/registration/validation";
 import { prisma } from "@/lib/db";
+
+const ParticipantManagementTable = dynamic(
+  () =>
+    import("@/components/admin/participant-management-table").then(
+      (mod) => mod.ParticipantManagementTable,
+    ),
+  {
+    loading: () => (
+      <div className="zas-admin-card zas-admin-wide-card">
+        <div className="zas-admin-skeleton-table" style={{ minHeight: "360px" }}>
+          <div className="zas-admin-skeleton-table-header" />
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <div className="zas-admin-skeleton-table-row" key={i} />
+          ))}
+        </div>
+      </div>
+    ),
+  },
+);
 
 export const metadata: Metadata = {
   title: "Manajemen Peserta",
@@ -178,69 +195,72 @@ export default async function AdminPaymentReviewPage({
       : {}),
   };
 
-  const filteredTotal = await prisma.registration.count({ where });
-  const pageCount = Math.max(1, Math.ceil(filteredTotal / perPage));
-  const page = Math.min(requestedPage, pageCount);
-  const registrations = await prisma.registration.findMany({
-    where,
-    orderBy: [{ registeredAt: "desc" }, { id: "desc" }],
-    skip: (page - 1) * perPage,
-    take: perPage,
-    select: {
-      id: true,
-      registrationNumber: true,
-      registeredAt: true,
-      status: true,
-      participantProfile: {
-        select: {
-          fullName: true,
-          email: true,
-          phone: true,
-          organizationName: true,
-          jobTitle: true,
-          city: true,
+  const skip = (requestedPage - 1) * perPage;
+  const [filteredTotal, registrations] = await Promise.all([
+    prisma.registration.count({ where }),
+    prisma.registration.findMany({
+      where,
+      orderBy: [{ registeredAt: "desc" }, { id: "desc" }],
+      skip,
+      take: perPage,
+      select: {
+        id: true,
+        registrationNumber: true,
+        registeredAt: true,
+        status: true,
+        participantProfile: {
+          select: {
+            fullName: true,
+            email: true,
+            phone: true,
+            organizationName: true,
+            jobTitle: true,
+            city: true,
+          },
         },
-      },
-      answers: {
-        where: { fieldKey: { in: [...REGISTRATION_DETAIL_ANSWER_KEYS] } },
-        select: { fieldKey: true, answer: true },
-      },
-      event: { select: { name: true } },
-      ticketType: { select: { id: true, name: true, priceAmount: true, currency: true } },
-      invoices: {
-        orderBy: [{ issuedAt: "desc" }, { id: "desc" }],
-        select: {
-          invoiceNumber: true,
-          legacyInvoiceNumber: true,
-          status: true,
-          amountDue: true,
-          currency: true,
-          paidAt: true,
-          payments: {
-            orderBy: [{ submittedAt: "desc" }, { id: "desc" }],
-            take: 1,
-            select: {
-              id: true,
-              status: true,
-              amountPaid: true,
-              paidAt: true,
-              submittedAt: true,
-              reviewedAt: true,
-              reviewNote: true,
-              reviewedBy: { select: { fullName: true } },
+        answers: {
+          where: { fieldKey: { in: [...REGISTRATION_DETAIL_ANSWER_KEYS] } },
+          select: { fieldKey: true, answer: true },
+        },
+        event: { select: { name: true } },
+        ticketType: { select: { id: true, name: true, priceAmount: true, currency: true } },
+        invoices: {
+          orderBy: [{ issuedAt: "desc" }, { id: "desc" }],
+          select: {
+            invoiceNumber: true,
+            legacyInvoiceNumber: true,
+            status: true,
+            amountDue: true,
+            currency: true,
+            paidAt: true,
+            payments: {
+              orderBy: [{ submittedAt: "desc" }, { id: "desc" }],
+              take: 1,
+              select: {
+                id: true,
+                status: true,
+                amountPaid: true,
+                paidAt: true,
+                submittedAt: true,
+                reviewedAt: true,
+                reviewNote: true,
+                reviewedBy: { select: { fullName: true } },
+              },
             },
           },
         },
-      },
-      invitationCollection: {
-        select: {
-          collectedAt: true,
-          method: true,
-          collectedBy: { select: { fullName: true } },
+        invitationCollection: {
+          select: {
+            collectedAt: true,
+            method: true,
+            collectedBy: { select: { fullName: true } },
+          },
         },
       },
-    },
-  });
+    }),
+  ]);
+  const pageCount = Math.max(1, Math.ceil(filteredTotal / perPage));
+  const page = Math.min(requestedPage, pageCount);
 
   const paymentIds = registrations.flatMap((registration) =>
     registration.invoices.flatMap((invoice) =>

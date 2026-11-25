@@ -71,7 +71,16 @@ export default async function AdminCheckInPage({ searchParams }: CheckInPageProp
         checkIn: { is: null },
       }
     : null;
-  const [registrations, readyTotal, historyTotal] = await Promise.all([
+  const readySkip = Math.max(0, (requestedReadyPage - 1) * READY_PAGE_SIZE);
+  const historySkip = Math.max(0, (requestedHistoryPage - 1) * HISTORY_PAGE_SIZE);
+
+  const [
+    registrations,
+    readyTotal,
+    historyTotal,
+    readyRegistrations,
+    checkInHistory,
+  ] = await Promise.all([
     selectedEvent && searchQuery.length >= 2
       ? prisma.registration.findMany({
           where: {
@@ -119,12 +128,6 @@ export default async function AdminCheckInPage({ searchParams }: CheckInPageProp
     selectedEvent
       ? prisma.checkIn.count({ where: { eventId: selectedEvent.id } })
       : Promise.resolve(0),
-  ]);
-  const readyPageCount = Math.max(1, Math.ceil(readyTotal / READY_PAGE_SIZE));
-  const readyPage = Math.min(requestedReadyPage, readyPageCount);
-  const historyPageCount = Math.max(1, Math.ceil(historyTotal / HISTORY_PAGE_SIZE));
-  const historyPage = Math.min(requestedHistoryPage, historyPageCount);
-  const [readyRegistrations, checkInHistory] = await Promise.all([
     readyWhere
       ? prisma.registration.findMany({
           where: readyWhere,
@@ -145,7 +148,7 @@ export default async function AdminCheckInPage({ searchParams }: CheckInPageProp
             invitationCollection: { select: { collectedAt: true } },
           },
           orderBy: [{ confirmedAt: "asc" }, { id: "asc" }],
-          skip: (readyPage - 1) * READY_PAGE_SIZE,
+          skip: readySkip,
           take: READY_PAGE_SIZE,
         })
       : Promise.resolve([]),
@@ -163,11 +166,15 @@ export default async function AdminCheckInPage({ searchParams }: CheckInPageProp
             },
           },
           orderBy: [{ checkedInAt: "desc" }, { id: "desc" }],
-          skip: (historyPage - 1) * HISTORY_PAGE_SIZE,
+          skip: historySkip,
           take: HISTORY_PAGE_SIZE,
         })
       : Promise.resolve([]),
   ]);
+  const readyPageCount = Math.max(1, Math.ceil(readyTotal / READY_PAGE_SIZE));
+  const readyPage = Math.min(requestedReadyPage, readyPageCount);
+  const historyPageCount = Math.max(1, Math.ceil(historyTotal / HISTORY_PAGE_SIZE));
+  const historyPage = Math.min(requestedHistoryPage, historyPageCount);
   const readyPageHref = (page: number) => {
     const params = new URLSearchParams();
     if (selectedEvent) params.set("eventId", selectedEvent.id);

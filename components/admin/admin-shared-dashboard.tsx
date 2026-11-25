@@ -17,7 +17,7 @@ export async function AdminSharedDashboard({
   additionalMetrics = [],
   ariaLabel = "Ringkasan Event",
   summaryClassName = "",
-  showSummary = true,
+  showSummary = false,
 }: {
   session: AdminSession;
   summary?: AdminDashboardSummary | null;
@@ -32,6 +32,7 @@ export async function AdminSharedDashboard({
     providedSummary === undefined && showSummary && canReadEvents
       ? await getAdminDashboardSummary(eventIds)
       : providedSummary;
+
   const metrics: AdminSummaryMetric[] = [
     {
       label: "Total Event",

@@ -11440,66 +11440,9 @@ body:has(.zas-admin-route) {
   padding-top: 28px;
 }
 
-/* Framer Motion Admin Realtime Loading & Transitions */
+/* Framer Motion Admin Transitions */
 .zas-admin-page-transition {
   width: 100%;
-}
-
-.zas-admin-progress-bar-wrap {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  z-index: 99999;
-  pointer-events: none;
-  background: transparent;
-}
-
-.zas-admin-progress-bar {
-  height: 100%;
-  background: linear-gradient(90deg, #d5ad78 0%, #fff1d0 50%, #d5ad78 100%);
-  box-shadow: 0 0 10px rgba(213, 173, 120, 0.75), 0 0 4px rgba(213, 173, 120, 0.9);
-  border-radius: 0 2px 2px 0;
-  transform-origin: left center;
-}
-
-.zas-admin-floating-loading {
-  position: fixed;
-  top: 14px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 99998;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 16px;
-  border-radius: 999px;
-  background: rgb(18 27 34 / 94%);
-  border: 1px solid rgb(213 173 120 / 35%);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45), 0 0 14px rgba(213, 173, 120, 0.2);
-  color: var(--zas-accent);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  pointer-events: none;
-}
-
-.zas-admin-floating-spinner {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  animation: zas-admin-spin 0.75s linear infinite;
-}
-
-.zas-admin-floating-spinner svg {
-  display: block;
-}
-
-.zas-admin-floating-text {
-  user-select: none;
 }
 
 /* Admin Dashboard Skeleton Loading Screen */
@@ -11666,6 +11609,89 @@ body:has(.zas-admin-route) {
   100% {
     background-position: -200% 0;
   }
+}
+
+/* Admin Error Boundary */
+.zas-admin-error-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+}
+
+.zas-admin-error-card {
+  max-width: 540px;
+  width: 100%;
+  text-align: center;
+  padding: 36px 28px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.zas-admin-error-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgb(230 182 106 / 12%);
+  border: 1px solid rgb(230 182 106 / 30%);
+}
+
+.zas-admin-error-card h1 {
+  font-size: 20px;
+  margin: 0;
+  color: var(--zas-ink);
+}
+
+.zas-admin-error-card p {
+  margin: 0;
+  color: var(--zas-muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.zas-admin-error-digest {
+  font-size: 11px !important;
+  color: #7d8b94 !important;
+}
+
+.zas-admin-error-digest code {
+  color: var(--zas-accent);
+  background: rgb(255 255 255 / 6%);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.zas-admin-error-actions {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.zas-admin-primary-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 18px;
+  border-radius: 6px;
+  background: var(--zas-accent, #d5ad78);
+  color: #0e161c;
+  font-size: 12px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: opacity 150ms ease;
+}
+
+.zas-admin-primary-button:hover {
+  opacity: 0.9;
 }
 
 .zas-sales-page > * {

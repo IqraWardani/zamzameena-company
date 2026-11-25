@@ -67,9 +67,20 @@ export default async function AdminInvitationsPage({
   const searchQuery = rawQuery?.trim().slice(0, 200) ?? "";
   const requestedReadyPage = parsePage(rawReadyPage);
 
-  const registrations =
+  const readyWhere = selectedEvent
+    ? {
+        eventId: selectedEvent.id,
+        status: "confirmed" as const,
+        tickets: { some: { status: "active" as const } },
+        invoices: { some: { status: "paid" as const } },
+        invitationCollection: { is: null },
+      }
+    : null;
+  const readySkip = Math.max(0, (requestedReadyPage - 1) * READY_PAGE_SIZE);
+
+  const [registrations, readyTotal, readyRegistrations] = await Promise.all([
     selectedEvent && searchQuery.length >= 2
-      ? await prisma.registration.findMany({
+      ? prisma.registration.findMany({
           where: {
             eventId: selectedEvent.id,
             status: "confirmed",
@@ -110,45 +121,36 @@ export default async function AdminInvitationsPage({
           orderBy: { confirmedAt: "asc" },
           take: 25,
         })
-      : [];
-  const readyWhere = selectedEvent
-    ? {
-        eventId: selectedEvent.id,
-        status: "confirmed" as const,
-        tickets: { some: { status: "active" as const } },
-        invoices: { some: { status: "paid" as const } },
-        invitationCollection: { is: null },
-      }
-    : null;
-  const readyTotal = readyWhere
-    ? await prisma.registration.count({ where: readyWhere })
-    : 0;
-  const readyPageCount = Math.max(1, Math.ceil(readyTotal / READY_PAGE_SIZE));
-  const readyPage = Math.min(requestedReadyPage, readyPageCount);
-  const readyRegistrations = readyWhere
-    ? await prisma.registration.findMany({
-        where: readyWhere,
-        select: {
-          id: true,
-          registrationNumber: true,
-          participantProfile: { select: { fullName: true } },
-          invoices: {
-            where: { status: "paid" },
-            orderBy: [{ paidAt: "desc" }, { issuedAt: "desc" }],
-            take: 1,
-            select: {
-              invoiceNumber: true,
-              legacyInvoiceNumber: true,
-              status: true,
-              paidAt: true,
+      : Promise.resolve([]),
+    readyWhere ? prisma.registration.count({ where: readyWhere }) : Promise.resolve(0),
+    readyWhere
+      ? prisma.registration.findMany({
+          where: readyWhere,
+          select: {
+            id: true,
+            registrationNumber: true,
+            participantProfile: { select: { fullName: true } },
+            invoices: {
+              where: { status: "paid" },
+              orderBy: [{ paidAt: "desc" }, { issuedAt: "desc" }],
+              take: 1,
+              select: {
+                invoiceNumber: true,
+                legacyInvoiceNumber: true,
+                status: true,
+                paidAt: true,
+              },
             },
           },
-        },
-        orderBy: [{ confirmedAt: "asc" }, { id: "asc" }],
-        skip: (readyPage - 1) * READY_PAGE_SIZE,
-        take: READY_PAGE_SIZE,
-      })
-    : [];
+          orderBy: [{ confirmedAt: "asc" }, { id: "asc" }],
+          skip: readySkip,
+          take: READY_PAGE_SIZE,
+        })
+      : Promise.resolve([]),
+  ]);
+
+  const readyPageCount = Math.max(1, Math.ceil(readyTotal / READY_PAGE_SIZE));
+  const readyPage = Math.min(requestedReadyPage, readyPageCount);
   const readyPageHref = (page: number) => {
     const params = new URLSearchParams();
     if (selectedEvent) params.set("eventId", selectedEvent.id);

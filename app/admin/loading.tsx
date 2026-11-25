@@ -1,7 +1,3 @@
-"use client";
-
-import { motion } from "framer-motion";
-
 export default function AdminLoading() {
   return (
     <main aria-busy="true" className="zas-admin-page zas-admin-loading-page">
@@ -33,16 +29,9 @@ export default function AdminLoading() {
       {/* Metric Cards Skeleton */}
       <div className="zas-admin-summary-grid zas-admin-skeleton-summary">
         {[0, 1, 2, 3].map((card) => (
-          <motion.div
-            animate={{ opacity: [0.6, 1, 0.6] }}
+          <div
             className="zas-admin-summary-card zas-admin-skeleton-card"
             key={card}
-            transition={{
-              duration: 1.5,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: card * 0.1,
-            }}
           >
             <div className="zas-admin-summary-card-header">
               <div className="zas-admin-skeleton-line zas-admin-skeleton-label" />
@@ -50,7 +39,7 @@ export default function AdminLoading() {
             </div>
             <div className="zas-admin-skeleton-line zas-admin-skeleton-metric" />
             <div className="zas-admin-skeleton-line zas-admin-skeleton-desc" />
-          </motion.div>
+          </div>
         ))}
       </div>
 
@@ -66,16 +55,9 @@ export default function AdminLoading() {
         <div className="zas-admin-skeleton-table">
           <div className="zas-admin-skeleton-table-header" />
           {[1, 2, 3, 4, 5].map((row) => (
-            <motion.div
-              animate={{ opacity: [0.5, 0.9, 0.5] }}
+            <div
               className="zas-admin-skeleton-table-row"
               key={row}
-              transition={{
-                duration: 1.5,
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: row * 0.08,
-              }}
             />
           ))}
         </div>

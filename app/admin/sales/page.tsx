@@ -1,15 +1,32 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import dynamic from "next/dynamic";
 import { AdminSharedDashboard } from "@/components/admin/admin-shared-dashboard";
 import { SalesMemberForm } from "@/components/admin/sales-member-form";
-import {
-  SalesDashboardSections,
-  type SalesPageSearchParams,
-} from "@/components/admin/sales-dashboard-sections";
+import type { SalesPageSearchParams } from "@/components/admin/sales-dashboard-sections";
 import { requireAdminPermission } from "@/lib/admin/authorization";
 import { prisma } from "@/lib/db";
 import { saveSalesMember } from "@/lib/sales/actions";
 import type { SalesPosition } from "@/lib/sales/labels";
+
+const SalesDashboardSections = dynamic(
+  () =>
+    import("@/components/admin/sales-dashboard-sections").then(
+      (mod) => mod.SalesDashboardSections,
+    ),
+  {
+    loading: () => (
+      <div className="zas-admin-card" style={{ minHeight: "360px" }}>
+        <div className="zas-admin-skeleton-table">
+          <div className="zas-admin-skeleton-table-header" />
+          {[1, 2, 3, 4].map((i) => (
+            <div className="zas-admin-skeleton-table-row" key={i} />
+          ))}
+        </div>
+      </div>
+    ),
+  },
+);
 
 const UUID_PATTERN =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;

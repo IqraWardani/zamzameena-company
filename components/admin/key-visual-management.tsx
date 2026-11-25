@@ -166,6 +166,7 @@ export function KeyVisualManagement({
               <Image
                 alt={`Key Visual aktif ${activeVisual.originalFilename}`}
                 height={600}
+                loading="lazy"
                 src={activeVisual.url}
                 unoptimized
                 width={1000}

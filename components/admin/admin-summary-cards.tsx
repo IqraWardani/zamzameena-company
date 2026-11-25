@@ -127,3 +127,32 @@ export function AdminSummaryCards({
     </section>
   );
 }
+
+export function AdminSummaryCardsSkeleton({
+  className = "",
+  count = 4,
+}: {
+  className?: string;
+  count?: number;
+}) {
+  return (
+    <div
+      aria-hidden="true"
+      className={`zas-admin-summary-grid zas-admin-skeleton-summary ${className}`.trim()}
+    >
+      {Array.from({ length: count }).map((_, idx) => (
+        <div
+          className="zas-admin-summary-card zas-admin-skeleton-card"
+          key={idx}
+        >
+          <div className="zas-admin-summary-card-header">
+            <div className="zas-admin-skeleton-line zas-admin-skeleton-label" />
+            <div className="zas-admin-skeleton-icon" />
+          </div>
+          <div className="zas-admin-skeleton-line zas-admin-skeleton-metric" />
+          <div className="zas-admin-skeleton-line zas-admin-skeleton-desc" />
+        </div>
+      ))}
+    </div>
+  );
+}

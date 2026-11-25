@@ -52,7 +52,7 @@ export default async function AdminEventsPage() {
         </div>
       </header>
 
-      <AdminSharedDashboard session={session} />
+      <AdminSharedDashboard session={session} showSummary={true} />
 
       {events.length === 0 ? (
         <section className="zas-admin-card">
@@ -84,6 +84,7 @@ export default async function AdminEventsPage() {
                           alt={`Key Visual ${event.name}`}
                           className="zas-admin-event-thumbnail"
                           height={48}
+                          loading="lazy"
                           src={session.permissions.includes(EVENT_PERMISSIONS.update)
                             ? `/admin/events/${event.id}/key-visual/image`
                             : event.keyVisuals[0].url}
