@@ -158,6 +158,59 @@ body:has(.zas-admin-route) {
   max-width: none;
 }
 
+.zas-skeleton-text {
+  border-radius: 4px;
+  background: linear-gradient(90deg, rgb(255 255 255 / 6%) 25%, rgb(255 255 255 / 12%) 50%, rgb(255 255 255 / 6%) 75%);
+  background-size: 200% 100%;
+  animation: zas-shimmer 1.5s infinite;
+}
+
+@keyframes zas-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.zas-skeleton-eyebrow {
+  width: 160px;
+  height: 12px;
+  margin-bottom: 12px;
+}
+
+.zas-skeleton-title {
+  width: 280px;
+  height: 32px;
+  margin-bottom: 10px;
+}
+
+.zas-skeleton-desc {
+  width: 420px;
+  max-width: 90%;
+  height: 16px;
+}
+
+.zas-skeleton-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.zas-skeleton-box {
+  flex: 1 1 180px;
+  height: 80px;
+  border-radius: 8px;
+  background: linear-gradient(90deg, rgb(255 255 255 / 6%) 25%, rgb(255 255 255 / 12%) 50%, rgb(255 255 255 / 6%) 75%);
+  background-size: 200% 100%;
+  animation: zas-shimmer 1.5s infinite;
+}
+
+.zas-admin-loading-indicator {
+  color: var(--zas-muted);
+  font-size: 14px;
+  text-align: center;
+  padding: 24px 0;
+}
+
 .zas-check-in-tools-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -7951,9 +8004,16 @@ body:has(.zas-admin-route) {
 }
 
 .zas-nav-dropdown-trigger > span {
+  display: inline-block;
   color: var(--zas-accent);
   font-size: 15px;
   line-height: 1;
+  transition: transform 180ms ease;
+}
+
+.zas-nav-dropdown:hover .zas-nav-dropdown-trigger > span,
+.zas-nav-dropdown-trigger[aria-expanded="true"] > span {
+  transform: rotate(180deg);
 }
 
 .zas-nav-dropdown-trigger:hover,
@@ -7976,9 +8036,25 @@ body:has(.zas-admin-route) {
   box-shadow: 0 16px 36px rgb(0 0 0 / 22%);
 }
 
+.zas-nav-dropdown-menu::before {
+  content: "";
+  position: absolute;
+  top: -14px;
+  left: 0;
+  right: 0;
+  height: 14px;
+}
+
 .zas-nav-dropdown-menu[hidden],
 .zas-mobile-submenu[hidden] {
   display: none;
+}
+
+@media (hover: hover) and (min-width: 1101px) {
+  .zas-nav-dropdown:hover .zas-nav-dropdown-menu,
+  .zas-nav-dropdown:focus-within .zas-nav-dropdown-menu {
+    display: grid !important;
+  }
 }
 
 .zas-nav-dropdown-menu a {
@@ -8014,6 +8090,21 @@ body:has(.zas-admin-route) {
   border-color: rgb(255 255 255 / 16%);
   border-radius: 8px;
   background: rgb(17 17 17 / 96%);
+}
+
+.zas-navbar.home-design-navbar .zas-nav-dropdown-menu a {
+  padding: 10px 14px;
+  color: rgb(255 255 255 / 85%);
+  font-size: 14px;
+  font-weight: 400;
+  border-radius: 6px;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.zas-navbar.home-design-navbar .zas-nav-dropdown-menu a:hover,
+.zas-navbar.home-design-navbar .zas-nav-dropdown-menu a[aria-current="page"] {
+  background: rgb(255 255 255 / 12%);
+  color: #fff;
 }
 
 @media (max-width: 1100px) {

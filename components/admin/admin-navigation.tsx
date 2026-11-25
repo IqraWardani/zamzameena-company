@@ -23,6 +23,7 @@ export function AdminNavigation({ items }: { items: AdminNavigationItem[] }) {
             className={isActive ? "is-active" : undefined}
             href={item.href}
             key={item.href}
+            prefetch={true}
           >
             {item.label}
             <span aria-hidden="true">↗</span>

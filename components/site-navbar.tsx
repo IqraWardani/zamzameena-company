@@ -33,12 +33,20 @@ export function SiteNavbar() {
   const headerRef = useRef<HTMLElement>(null);
   const menuToggleRef = useRef<HTMLButtonElement>(null);
   const desktopTriggers = useRef<Record<string, HTMLButtonElement | null>>({});
-  const [previousPathname, setPreviousPathname] = useState(pathname);
-  if (previousPathname !== pathname) {
-    setPreviousPathname(pathname);
+  const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
     setMenuOpen(false);
     setOpenDropdown(null);
-  }
+  }, [pathname]);
+
+  useEffect(() => {
+    return () => {
+      if (closeTimeoutRef.current) {
+        clearTimeout(closeTimeoutRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const updateScrollState = () => setScrolled(window.scrollY > 24);
@@ -83,14 +91,21 @@ export function SiteNavbar() {
     }
   };
 
-  const toggleDropdown = (label: string, firstLinkId: string) => {
-    const nextOpen = openDropdown === label ? null : label;
-    setOpenDropdown(nextOpen);
-    if (nextOpen && !menuOpen) {
-      window.requestAnimationFrame(() => {
-        document.getElementById(firstLinkId)?.querySelector("a")?.focus();
-      });
+  const handleDropdownEnter = (label: string) => {
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current);
+      closeTimeoutRef.current = null;
     }
+    setOpenDropdown(label);
+  };
+
+  const handleDropdownLeave = () => {
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current);
+    }
+    closeTimeoutRef.current = setTimeout(() => {
+      setOpenDropdown(null);
+    }, 180);
   };
 
   return (
@@ -135,13 +150,24 @@ export function SiteNavbar() {
               : children.some((child) => isActivePath(pathname, child.href));
 
             return (
-              <div className="zas-nav-dropdown" key={item.label}>
+              <div
+                className="zas-nav-dropdown"
+                key={item.label}
+                onMouseEnter={() => handleDropdownEnter(item.label)}
+                onMouseLeave={handleDropdownLeave}
+              >
                 <button
                   aria-controls={id}
                   aria-expanded={expanded}
                   aria-current={isCurrent ? "page" : undefined}
                   className={`zas-nav-dropdown-trigger${isCurrent ? " is-current" : ""}`}
-                  onClick={() => toggleDropdown(item.label, id)}
+                  onClick={() => {
+                    if (closeTimeoutRef.current) {
+                      clearTimeout(closeTimeoutRef.current);
+                      closeTimeoutRef.current = null;
+                    }
+                    setOpenDropdown((current) => (current === item.label ? null : item.label));
+                  }}
                   ref={(node) => {
                     desktopTriggers.current[item.label] = node;
                   }}
@@ -150,13 +176,24 @@ export function SiteNavbar() {
                   {item.label}
                   <span aria-hidden="true">⌄</span>
                 </button>
-                <div className="zas-nav-dropdown-menu" hidden={!expanded} id={id}>
+                <div
+                  className="zas-nav-dropdown-menu"
+                  hidden={!expanded}
+                  id={id}
+                  onMouseEnter={() => handleDropdownEnter(item.label)}
+                >
                   {children.map((child) => (
                     <Link
                       aria-current={pathname === child.href.split("?")[0] ? "page" : undefined}
                       href={child.href}
                       key={child.href}
-                      onClick={() => setOpenDropdown(null)}
+                      onClick={() => {
+                        if (closeTimeoutRef.current) {
+                          clearTimeout(closeTimeoutRef.current);
+                          closeTimeoutRef.current = null;
+                        }
+                        setOpenDropdown(null);
+                      }}
                     >
                       {child.label}
                     </Link>

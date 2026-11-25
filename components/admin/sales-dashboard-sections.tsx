@@ -10,7 +10,7 @@ import {
   SalesMemberForm,
   type SalesMemberFormValues,
 } from "@/components/admin/sales-member-form";
-import { SalesCharts } from "@/components/admin/sales-charts";
+import { ClientSalesCharts } from "@/components/admin/client-sales-charts";
 import { prisma } from "@/lib/db";
 import { SALES_POSITION_LABELS, type SalesPosition } from "@/lib/sales/labels";
 import { calculateSalesTargetAchievement } from "@/lib/sales/target-achievement";
@@ -277,12 +277,20 @@ async function SalesStatisticsSection({
   const formatTicketCount = (count: number) => new Intl.NumberFormat("id-ID").format(count);
   const performers = performanceRows.map((member) => ({
     id: member.sales_member_id,
-    name: member.member_name,
+    name: member.member_name ?? "Tanpa Nama",
     position: member.position,
-    tickets: Number(member.paid_tickets),
+    tickets: Number(member.paid_tickets) || 0,
   }));
+  const safeTimezone = (() => {
+    try {
+      Intl.DateTimeFormat(undefined, { timeZone: event.timezone });
+      return event.timezone;
+    } catch {
+      return "Asia/Jakarta";
+    }
+  })();
   const today = new Intl.DateTimeFormat("en-CA", {
-    timeZone: event.timezone,
+    timeZone: safeTimezone,
     year: "numeric",
     month: "2-digit",
     day: "2-digit",
@@ -344,13 +352,13 @@ async function SalesStatisticsSection({
         </div>
       </section>
 
-      <SalesCharts
+      <ClientSalesCharts
         performers={performers}
         today={today}
         trend={trendRows.map((row) => ({
-          date: row.sale_date,
+          date: String(row.sale_date || ""),
           salesMemberId: row.sales_member_id,
-          tickets: row.paid_tickets,
+          tickets: Number(row.paid_tickets) || 0,
         }))}
       />
     </>

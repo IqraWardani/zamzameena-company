@@ -13,6 +13,7 @@ export function DashboardBackLink() {
       aria-label="Kembali ke Dashboard Admin"
       className="zas-admin-dashboard-back-link"
       href="/admin"
+      prefetch={true}
     >
       <span aria-hidden="true">←</span>
       Kembali ke Dashboard

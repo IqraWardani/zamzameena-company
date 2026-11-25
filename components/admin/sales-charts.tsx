@@ -20,15 +20,20 @@ const POSITION_OPTIONS: Array<{ value: SalesPosition | "director"; label: string
   { value: "sales", label: SALES_POSITION_LABELS.sales },
 ];
 
-function formatDate(value: string, options: Intl.DateTimeFormatOptions): string {
+function formatDate(value: string | undefined | null, options: Intl.DateTimeFormatOptions): string {
+  if (!value) return "—";
+  const date = new Date(`${value}T12:00:00Z`);
+  if (Number.isNaN(date.getTime())) return "—";
   return new Intl.DateTimeFormat("id-ID", {
     timeZone: "UTC",
     ...options,
-  }).format(new Date(`${value}T12:00:00Z`));
+  }).format(date);
 }
 
-function formatNumber(value: number): string {
-  return new Intl.NumberFormat("id-ID").format(value);
+function formatNumber(value: number | undefined | null): string {
+  const numeric = typeof value === "number" ? value : Number(value);
+  if (Number.isNaN(numeric)) return "0";
+  return new Intl.NumberFormat("id-ID").format(numeric);
 }
 
 function chartCoordinates(points: SalesTrendPoint[]) {
@@ -40,13 +45,32 @@ function chartCoordinates(points: SalesTrendPoint[]) {
   const bottom = 36;
   const plotWidth = width - left - right;
   const plotHeight = height - top - bottom;
-  const maximum = Math.max(1, ...points.map((point) => point.tickets));
-  const firstDate = points.length
-    ? new Date(`${points[0].date}T12:00:00Z`).getTime()
-    : 0;
-  const lastDate = points.length
-    ? new Date(`${points.at(-1)!.date}T12:00:00Z`).getTime()
-    : 0;
+
+  const validPoints = (points || []).filter(
+    (point) =>
+      point &&
+      typeof point.date === "string" &&
+      !Number.isNaN(new Date(`${point.date}T12:00:00Z`).getTime()),
+  );
+
+  if (validPoints.length === 0) {
+    return {
+      width,
+      height,
+      left,
+      right,
+      top,
+      bottom,
+      plotWidth,
+      plotHeight,
+      maximum: 1,
+      values: [],
+    };
+  }
+
+  const maximum = Math.max(1, ...validPoints.map((point) => Number(point.tickets) || 0));
+  const firstDate = new Date(`${validPoints[0].date}T12:00:00Z`).getTime();
+  const lastDate = new Date(`${validPoints[validPoints.length - 1].date}T12:00:00Z`).getTime();
   const dateRange = Math.max(1, lastDate - firstDate);
 
   return {
@@ -59,13 +83,19 @@ function chartCoordinates(points: SalesTrendPoint[]) {
     plotWidth,
     plotHeight,
     maximum,
-    values: points.map((point) => ({
-      ...point,
-      x: points.length === 1
-        ? left + plotWidth / 2
-        : left + ((new Date(`${point.date}T12:00:00Z`).getTime() - firstDate) / dateRange) * plotWidth,
-      y: top + plotHeight - (point.tickets / maximum) * plotHeight,
-    })),
+    values: validPoints.map((point) => {
+      const tickets = Number(point.tickets) || 0;
+      const pointTime = new Date(`${point.date}T12:00:00Z`).getTime();
+      return {
+        ...point,
+        tickets,
+        x:
+          validPoints.length === 1
+            ? left + plotWidth / 2
+            : left + ((pointTime - firstDate) / dateRange) * plotWidth,
+        y: top + plotHeight - (tickets / maximum) * plotHeight,
+      };
+    }),
   };
 }
 
@@ -132,12 +162,21 @@ export function SalesCharts({
   const area = chart.values.length
     ? `${line} L ${chart.values.at(-1)!.x} ${chart.top + chart.plotHeight} L ${chart.values[0].x} ${chart.top + chart.plotHeight} Z`
     : "";
-  const filteredPerformers = performers
-    .filter((person) => position === "all" || person.position === position)
-    .sort((first, second) => second.tickets - first.tickets || first.name.localeCompare(second.name, "id"))
+  const filteredPerformers = (performers || [])
+    .filter((person) => person && (position === "all" || person.position === position))
+    .sort(
+      (first, second) =>
+        (Number(second.tickets) || 0) - (Number(first.tickets) || 0) ||
+        (first.name || "").localeCompare(second.name || "", "id"),
+    )
     .slice(0, showAll ? undefined : 10);
-  const maxTickets = Math.max(1, ...filteredPerformers.map((person) => person.tickets));
-  const hasSales = filteredPerformers.some((person) => person.tickets > 0);
+  const maxTickets = Math.max(
+    1,
+    ...filteredPerformers.map((person) => Number(person.tickets) || 0),
+  );
+  const hasSales = filteredPerformers.some(
+    (person) => (Number(person.tickets) || 0) > 0,
+  );
 
   return (
     <div className="zas-sales-chart-grid">
